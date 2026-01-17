@@ -14,7 +14,12 @@ Składa się z AI asystenta (SENTINEL), automatycznych aktualizacji cen, analizy
 | `PORTFEL_KOMPLETNY.gs` | Główny moduł: ceny, waluty, formuły | ✅ TAK |
 | `NEWSY_MODUL.gs` | Analiza newsów z AI | ✅ TAK |
 | `ASYSTENT_MODUL.gs` | SENTINEL - AI asystent | ✅ TAK |
+| `SETUP_WIZARD.gs` | 🆕 Instalacja + profile inwestycyjne | ✅ TAK |
+| `CSV_IMPORT.gs` | 🆕 Import z Trading 212 | Opcjonalny |
+| `DASHBOARD_API.gs` | 🆕 API dla web dashboard | Opcjonalny |
 | `DYWIDENDY_MODUL.gs` | Tracker dywidend | Opcjonalny |
+| `APPSHEET_MODUL.gs` | Integracja z AppSheet | Opcjonalny |
+
 
 ---
 
