@@ -1,0 +1,1496 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SENTINEL | Portfolio Dashboard</title>
+    <meta name="description" content="Premium Portfolio Dashboard with AI-powered insights">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* =====================================================
+           SENTINEL DASHBOARD - GLASSMORPHISM PREMIUM EDITION
+           ===================================================== */
+        
+        :root {
+            /* Background Gradient Palette */
+            --bg-dark: #050510;
+            --bg-gradient-1: #0a0a1a;
+            --bg-gradient-2: #1a0a2e;
+            --bg-gradient-3: #0a1a2e;
+            --bg-gradient-4: #0a0a20;
+            
+            /* Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-bg-hover: rgba(255, 255, 255, 0.06);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-border-hover: rgba(255, 255, 255, 0.15);
+            --glass-blur: 20px;
+            
+            /* Neon Colors */
+            --neon-green: #00ff88;
+            --neon-green-glow: rgba(0, 255, 136, 0.4);
+            --neon-red: #ff4466;
+            --neon-red-glow: rgba(255, 68, 102, 0.4);
+            --neon-blue: #00d4ff;
+            --neon-blue-glow: rgba(0, 212, 255, 0.3);
+            --neon-purple: #a855f7;
+            --neon-purple-glow: rgba(168, 85, 247, 0.3);
+            --neon-yellow: #fbbf24;
+            
+            /* Text */
+            --text-primary: #ffffff;
+            --text-secondary: #8b8b9e;
+            --text-muted: #5a5a70;
+            
+            /* Gradients */
+            --gradient-header: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-green: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            --gradient-blue: linear-gradient(135deg, #00d4ff 0%, #667eea 100%);
+            --gradient-purple: linear-gradient(135deg, #a855f7 0%, #667eea 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Animated Background */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Gradient Mesh Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 600px;
+            height: 600px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            top: -200px;
+            left: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0a84ff 100%);
+            top: 50%;
+            right: -150px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 400px;
+            height: 400px;
+            background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+            bottom: -100px;
+            left: 30%;
+            animation-delay: -14s;
+        }
+
+        .orb-4 {
+            width: 350px;
+            height: 350px;
+            background: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
+            top: 40%;
+            left: 10%;
+            animation-delay: -10s;
+            opacity: 0.3;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(20px, 10px) scale(1.02); }
+        }
+
+        /* Noise Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Main Content Wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+        }
+
+        /* =====================================================
+           GLASSMORPHISM HEADER
+           ===================================================== */
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border-bottom: 1px solid var(--glass-border);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-header);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            100% { left: 100%; }
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 1.5rem;
+            letter-spacing: -0.5px;
+            background: var(--gradient-green);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .header-time {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .header-time span {
+            color: var(--neon-green);
+            font-weight: 600;
+        }
+
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { 
+                opacity: 1; 
+                box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4);
+            }
+            50% { 
+                opacity: 0.8; 
+                box-shadow: 0 0 0 8px rgba(0, 255, 136, 0);
+            }
+        }
+
+        /* =====================================================
+           MAIN CONTENT
+           ===================================================== */
+        .main {
+            padding: 2rem;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* =====================================================
+           GLASSMORPHISM CARDS
+           ===================================================== */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+        }
+
+        .glass-card:hover {
+            background: var(--glass-bg-hover);
+            border-color: var(--glass-border-hover);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        /* =====================================================
+           STATS GRID
+           ===================================================== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-icon {
+            font-size: 1rem;
+        }
+
+        .stat-value {
+            font-size: 2.25rem;
+            font-weight: 800;
+            letter-spacing: -1.5px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a0a0b0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-value.positive {
+            background: var(--gradient-green);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px var(--neon-green-glow);
+        }
+
+        .stat-value.negative {
+            background: linear-gradient(135deg, #ff4466 0%, #ff6b8a 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px var(--neon-red-glow);
+        }
+
+        .stat-change {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            padding: 0.35rem 0.75rem;
+            border-radius: 100px;
+        }
+
+        .stat-change.positive {
+            color: var(--neon-green);
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .stat-change.negative {
+            color: var(--neon-red);
+            background: rgba(255, 68, 102, 0.1);
+            border: 1px solid rgba(255, 68, 102, 0.2);
+        }
+
+        /* =====================================================
+           CHARTS SECTION
+           ===================================================== */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            animation: fadeInUp 0.6s ease-out backwards;
+            animation-delay: 0.5s;
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .chart-title {
+            font-size: 1.125rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-tabs {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .chart-tab {
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .chart-tab:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+
+        .chart-tab.active {
+            background: var(--gradient-blue);
+            border-color: transparent;
+            color: white;
+            box-shadow: 0 0 20px var(--neon-blue-glow);
+        }
+
+        .chart-container {
+            height: 280px;
+            position: relative;
+        }
+
+        /* =====================================================
+           INFO PANELS (3-column grid)
+           ===================================================== */
+        .info-panels {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .fx-rates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .fx-rate {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.875rem 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.2s ease;
+        }
+
+        .fx-rate:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+        }
+
+        .fx-pair {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .fx-value {
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--neon-blue);
+        }
+
+        .strategy-bar {
+            margin-bottom: 0.75rem;
+        }
+
+        .strategy-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .strategy-progress {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 100px;
+            overflow: hidden;
+        }
+
+        .strategy-fill {
+            height: 100%;
+            border-radius: 100px;
+            transition: width 1s ease-out;
+        }
+
+        .strategy-fill.core {
+            background: var(--gradient-blue);
+            box-shadow: 0 0 15px var(--neon-blue-glow);
+        }
+
+        .strategy-fill.satellites {
+            background: var(--gradient-purple);
+            box-shadow: 0 0 15px var(--neon-purple-glow);
+        }
+
+        .news-item {
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .news-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+        }
+
+        .news-ticker {
+            font-weight: 700;
+            color: var(--neon-blue);
+            font-size: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .news-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        /* =====================================================
+           POSITIONS TABLE
+           ===================================================== */
+        .positions-section {
+            animation: fadeInUp 0.6s ease-out backwards;
+            animation-delay: 0.7s;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .positions-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .positions-table th {
+            text-align: left;
+            padding: 1rem 1.25rem;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.03);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .positions-table td {
+            padding: 1rem 1.25rem;
+            border-bottom: 1px solid var(--glass-border);
+            font-size: 0.9rem;
+        }
+
+        .positions-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .positions-table tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .positions-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .ticker-cell {
+            display: flex;
+            align-items: center;
+            gap: 0.875rem;
+        }
+
+        .ticker-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.85rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ticker-icon::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
+        }
+
+        .ticker-name {
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .ticker-type {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            margin-top: 0.125rem;
+        }
+
+        .value-cell {
+            font-weight: 600;
+        }
+
+        .value-cell.positive {
+            color: var(--neon-green);
+        }
+
+        .value-cell.negative {
+            color: var(--neon-red);
+        }
+
+        .fx-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.375rem 0.625rem;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .fx-badge.positive {
+            background: rgba(0, 255, 136, 0.1);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+        }
+
+        .fx-badge.negative {
+            background: rgba(255, 68, 102, 0.1);
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 68, 102, 0.2);
+        }
+
+        /* =====================================================
+           SENTINEL AI CHAT WIDGET
+           ===================================================== */
+        .chat-fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            background: var(--gradient-header);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.4);
+            z-index: 1000;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: none;
+        }
+
+        .chat-fab:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.5);
+        }
+
+        .chat-fab span {
+            font-size: 1.75rem;
+        }
+
+        .chat-fab-pulse {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+            background: var(--gradient-header);
+            animation: fabPulse 2s infinite;
+            z-index: -1;
+        }
+
+        @keyframes fabPulse {
+            0%, 100% { transform: scale(1); opacity: 0.4; }
+            50% { transform: scale(1.2); opacity: 0; }
+        }
+
+        .chat-modal {
+            position: fixed;
+            bottom: 7rem;
+            right: 2rem;
+            width: 380px;
+            max-height: 500px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .chat-modal.open {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            padding: 1.25rem;
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-header);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .chat-info h3 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .chat-info p {
+            font-size: 0.75rem;
+            color: var(--neon-green);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 1.25rem;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-message {
+            max-width: 85%;
+            padding: 0.875rem 1rem;
+            border-radius: 16px;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+
+        .chat-message.ai {
+            background: rgba(102, 126, 234, 0.15);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-message.user {
+            background: var(--gradient-blue);
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 3px var(--neon-blue-glow);
+        }
+
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .chat-send {
+            width: 44px;
+            height: 44px;
+            background: var(--gradient-blue);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chat-send:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-blue-glow);
+        }
+
+        .chat-send svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        /* =====================================================
+           RESPONSIVE DESIGN
+           ===================================================== */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+            .info-panels {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            .main {
+                padding: 1rem;
+            }
+            .header {
+                padding: 1rem;
+            }
+            .logo-text {
+                font-size: 1.25rem;
+            }
+            .stat-value {
+                font-size: 1.75rem;
+            }
+            .chat-modal {
+                width: calc(100% - 2rem);
+                right: 1rem;
+                left: 1rem;
+            }
+            .chat-fab {
+                bottom: 1rem;
+                right: 1rem;
+                width: 56px;
+                height: 56px;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation">
+        <div class="bg-gradient-orb orb-1"></div>
+        <div class="bg-gradient-orb orb-2"></div>
+        <div class="bg-gradient-orb orb-3"></div>
+        <div class="bg-gradient-orb orb-4"></div>
+    </div>
+    <div class="noise-overlay"></div>
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">🛡️</div>
+                <div>
+                    <div class="logo-text">SENTINEL</div>
+                    <div class="logo-subtitle">Portfolio Dashboard</div>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="live-indicator">
+                    <div class="live-dot"></div>
+                    LIVE
+                </div>
+                <div class="header-time">
+                    Aktualizacja: <span id="lastUpdate">17.01.2026, 23:15</span>
+                </div>
+            </div>
+        </header>
+
+        <main class="main">
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card glass-card">
+                    <div class="stat-label">
+                        <span class="stat-icon">💼</span> Wartość Portfolio
+                    </div>
+                    <div class="stat-value">24 683,54 zł</div>
+                    <div class="stat-change positive">
+                        ↑ +1 892,45 zł (+8,3%)
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-label">
+                        <span class="stat-icon">📈</span> Zysk Całkowity
+                    </div>
+                    <div class="stat-value positive">+2 156,78 zł</div>
+                    <div class="stat-change positive">
+                        ↑ +234,12 zł dziś
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-label">
+                        <span class="stat-icon">💱</span> Wpływ FX
+                    </div>
+                    <div class="stat-value positive">+892,34 zł</div>
+                    <div class="stat-change positive">
+                        ↑ PLN osłabiony +2,1%
+                    </div>
+                </div>
+                <div class="stat-card glass-card">
+                    <div class="stat-label">
+                        <span class="stat-icon">📊</span> Pozycje
+                    </div>
+                    <div class="stat-value">8</div>
+                    <div class="stat-change positive">
+                        5 zyskownych / 3 stratnych
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Section -->
+            <div class="charts-section">
+                <div class="chart-card glass-card">
+                    <div class="chart-header">
+                        <div class="chart-title">📊 Wartość Portfolio</div>
+                        <div class="chart-tabs">
+                            <button class="chart-tab">1D</button>
+                            <button class="chart-tab active">1W</button>
+                            <button class="chart-tab">1M</button>
+                            <button class="chart-tab">YTD</button>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="portfolioChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card glass-card">
+                    <div class="chart-header">
+                        <div class="chart-title">🥧 Alokacja</div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="allocationChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Info Panels -->
+            <div class="info-panels">
+                <div class="glass-card">
+                    <div class="panel-title">💱 Kursy Walut</div>
+                    <div class="fx-rates">
+                        <div class="fx-rate">
+                            <span class="fx-pair">🇺🇸 USD/PLN</span>
+                            <span class="fx-value">4,0547</span>
+                        </div>
+                        <div class="fx-rate">
+                            <span class="fx-pair">🇪🇺 EUR/PLN</span>
+                            <span class="fx-value">4,2134</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="panel-title">🎯 Strategia Core/Satellites</div>
+                    <div class="strategy-bar">
+                        <div class="strategy-label">
+                            <span>Core (ETF, REIT)</span>
+                            <span style="color: var(--neon-blue);">65%</span>
+                        </div>
+                        <div class="strategy-progress">
+                            <div class="strategy-fill core" style="width: 65%;"></div>
+                        </div>
+                    </div>
+                    <div class="strategy-bar">
+                        <div class="strategy-label">
+                            <span>Satellites (Akcje)</span>
+                            <span style="color: var(--neon-purple);">35%</span>
+                        </div>
+                        <div class="strategy-progress">
+                            <div class="strategy-fill satellites" style="width: 35%;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card">
+                    <div class="panel-title">📰 Najnowsze Newsy</div>
+                    <div class="news-item">
+                        <div class="news-ticker">AAPL</div>
+                        <div class="news-text">Q4 earnings beat expectations, AI initiatives acceleration</div>
+                    </div>
+                    <div class="news-item">
+                        <div class="news-ticker">IONQ</div>
+                        <div class="news-text">Quantum computing milestone achieved, new partnerships</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Positions Table -->
+            <div class="positions-section glass-card">
+                <div class="section-header">
+                    <div class="section-title">📋 Twoje Pozycje</div>
+                    <button class="chart-tab active">Sortuj: Wartość ↓</button>
+                </div>
+                <div class="table-wrapper">
+                    <table class="positions-table">
+                        <thead>
+                            <tr>
+                                <th>Ticker</th>
+                                <th>Ilość</th>
+                                <th>Cena Śr.</th>
+                                <th>Cena Live</th>
+                                <th>Wartość PLN</th>
+                                <th>Zysk/Strata</th>
+                                <th>Wpływ FX</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="ticker-cell">
+                                        <div class="ticker-icon" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">🍎</div>
+                                        <div>
+                                            <div class="ticker-name">AAPL</div>
+                                            <div class="ticker-type">AKCJA • USD</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>5</td>
+                                <td>180,00 $</td>
+                                <td>229,00 $</td>
+                                <td>4 650,58 zł</td>
+                                <td class="value-cell positive">+1 683,54 zł</td>
+                                <td><span class="fx-badge positive">+380,04 zł</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="ticker-cell">
+                                        <div class="ticker-icon" style="background: linear-gradient(135deg, #1877f2 0%, #0d65d9 100%);">Ⓜ️</div>
+                                        <div>
+                                            <div class="ticker-name">META</div>
+                                            <div class="ticker-type">AKCJA • USD</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>0.45</td>
+                                <td>660,00 $</td>
+                                <td>712,45 $</td>
+                                <td>1 163,12 zł</td>
+                                <td class="value-cell positive">+234,56 zł</td>
+                                <td><span class="fx-badge positive">+45,23 zł</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="ticker-cell">
+                                        <div class="ticker-icon" style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">⚛️</div>
+                                        <div>
+                                            <div class="ticker-name">IONQ</div>
+                                            <div class="ticker-type">AKCJA • USD</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>1.50</td>
+                                <td>51,65 $</td>
+                                <td>48,60 $</td>
+                                <td>264,82 zł</td>
+                                <td class="value-cell negative">-15,69 zł</td>
+                                <td><span class="fx-badge positive">+1,04 zł</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="ticker-cell">
+                                        <div class="ticker-icon" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">📊</div>
+                                        <div>
+                                            <div class="ticker-name">VUAA</div>
+                                            <div class="ticker-type">ETF • EUR</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>2.73</td>
+                                <td>113,50 €</td>
+                                <td>115,46 €</td>
+                                <td>1 328,45 zł</td>
+                                <td class="value-cell positive">+67,89 zł</td>
+                                <td><span class="fx-badge negative">-12,34 zł</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="ticker-cell">
+                                        <div class="ticker-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">🔊</div>
+                                        <div>
+                                            <div class="ticker-name">SOUN</div>
+                                            <div class="ticker-type">AKCJA • USD</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>1.51</td>
+                                <td>19,37 $</td>
+                                <td>10,92 $</td>
+                                <td>59,81 zł</td>
+                                <td class="value-cell negative">-46,47 zł</td>
+                                <td><span class="fx-badge negative">-3,21 zł</span></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="ticker-cell">
+                                        <div class="ticker-icon" style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">🏢</div>
+                                        <div>
+                                            <div class="ticker-name">O</div>
+                                            <div class="ticker-type">REIT • USD</div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>10</td>
+                                <td>52,00 $</td>
+                                <td>54,80 $</td>
+                                <td>2 221,96 zł</td>
+                                <td class="value-cell positive">+113,58 zł</td>
+                                <td><span class="fx-badge positive">+89,21 zł</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- SENTINEL AI Chat Widget -->
+    <button class="chat-fab" onclick="toggleChat()">
+        <div class="chat-fab-pulse"></div>
+        <span>🤖</span>
+    </button>
+
+    <div class="chat-modal" id="chatModal">
+        <div class="chat-header">
+            <div class="chat-avatar">🛡️</div>
+            <div class="chat-info">
+                <h3>SENTINEL AI</h3>
+                <p>● Online</p>
+            </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message ai">
+                Cześć! 👋 Jestem SENTINEL, Twój asystent inwestycyjny. Mogę ocenić Twój portfel, przeanalizować spółki lub odpowiedzieć na pytania o rynek. Co mogę dla Ciebie zrobić?
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Zapytaj SENTINEL..." onkeypress="handleKeyPress(event)">
+            <button class="chat-send" onclick="sendMessage()">
+                <svg viewBox="0 0 24 24">
+                    <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // =====================================================
+        // CHARTS CONFIGURATION
+        // =====================================================
+        
+        // Portfolio Value Chart with Gradient
+        const portfolioCtx = document.getElementById('portfolioChart').getContext('2d');
+        
+        const gradient = portfolioCtx.createLinearGradient(0, 0, 0, 300);
+        gradient.addColorStop(0, 'rgba(0, 212, 255, 0.3)');
+        gradient.addColorStop(1, 'rgba(0, 212, 255, 0)');
+
+        const portfolioChart = new Chart(portfolioCtx, {
+            type: 'line',
+            data: {
+                labels: ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd'],
+                datasets: [{
+                    label: 'Wartość',
+                    data: [22500, 22800, 23100, 22900, 23600, 24200, 24683],
+                    borderColor: '#00d4ff',
+                    backgroundColor: gradient,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 5,
+                    pointHoverRadius: 8,
+                    pointBackgroundColor: '#00d4ff',
+                    pointBorderColor: '#050510',
+                    pointBorderWidth: 3,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    intersect: false,
+                    mode: 'index'
+                },
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(10, 10, 26, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#00d4ff',
+                        borderColor: 'rgba(0, 212, 255, 0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12,
+                        titleFont: { weight: 600 },
+                        bodyFont: { weight: 700, size: 16 },
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return context.parsed.y.toLocaleString('pl-PL') + ' zł';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        grid: { 
+                            color: 'rgba(255, 255, 255, 0.05)',
+                            drawBorder: false
+                        },
+                        ticks: { 
+                            color: '#8b8b9e',
+                            font: { size: 11 },
+                            callback: function(value) {
+                                return (value / 1000) + 'k';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { 
+                            color: '#8b8b9e',
+                            font: { size: 11 }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Allocation Doughnut Chart
+        const allocationCtx = document.getElementById('allocationChart').getContext('2d');
+        const allocationChart = new Chart(allocationCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['AAPL', 'O', 'VUAA', 'META', 'IONQ', 'SOUN'],
+                datasets: [{
+                    data: [35, 17, 15, 12, 8, 5],
+                    backgroundColor: [
+                        '#1a1a2e',
+                        '#3b82f6',
+                        '#f59e0b',
+                        '#1877f2',
+                        '#6366f1',
+                        '#10b981'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: 8
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '70%',
+                plugins: {
+                    legend: {
+                        position: 'right',
+                        labels: {
+                            color: '#f0f6fc',
+                            padding: 12,
+                            font: { size: 12, weight: 500 },
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(10, 10, 26, 0.9)',
+                        titleColor: '#fff',
+                        bodyColor: '#00d4ff',
+                        borderColor: 'rgba(0, 212, 255, 0.3)',
+                        borderWidth: 1,
+                        padding: 12,
+                        cornerRadius: 12
+                    }
+                }
+            }
+        });
+
+        // =====================================================
+        // CHAT FUNCTIONALITY
+        // =====================================================
+        
+        function toggleChat() {
+            const modal = document.getElementById('chatModal');
+            modal.classList.toggle('open');
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            const messagesContainer = document.getElementById('chatMessages');
+            
+            // Add user message
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.textContent = message;
+            messagesContainer.appendChild(userMsg);
+
+            input.value = '';
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            // Simulate AI response
+            setTimeout(() => {
+                const aiMsg = document.createElement('div');
+                aiMsg.className = 'chat-message ai';
+                aiMsg.innerHTML = getAIResponse(message);
+                messagesContainer.appendChild(aiMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
+        }
+
+        function getAIResponse(message) {
+            const msg = message.toLowerCase();
+            
+            if (msg.includes('portfel') || msg.includes('ocena')) {
+                return '📊 <strong>Ocena portfela:</strong><br><br>Twój portfel ma solidną bazę z 65% w Core (ETF/REIT). Sugeruję doważenie VUAA do 75% udziału Core zgodnie ze strategią. IONQ i SOUN to spekulacje - trzymaj lub uśredniaj przy dalszych spadkach.';
+            } else if (msg.includes('aapl') || msg.includes('apple')) {
+                return '🍎 <strong>AAPL Analysis:</strong><br><br>Apple to Twoja najlepsza pozycja (+43% zysk). Solidna spółka z cash flow $100B+. Przy obecnej wycenie (P/E ~30) można trzymać długoterminowo. ✅ HOLD';
+            } else if (msg.includes('ionq') || msg.includes('quantum')) {
+                return '⚛️ <strong>IONQ:</strong><br><br>Spekulacyjna pozycja w quantum computing. Wysoki potencjał, ale też ryzyko. Firma pre-revenue stage. 🎰 KASYNO - trzymaj jako małą pozycję (max 5% portfela).';
+            } else {
+                return '🤔 Możesz zapytać mnie o:<br>• Ocenę portfela<br>• Analizę konkretnej spółki (np. "co z AAPL?")<br>• Strategię Core/Satellites<br>• Kurs walut i wpływ FX';
+            }
+        }
+
+        // =====================================================
+        // TIME UPDATE
+        // =====================================================
+        
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('lastUpdate').textContent = 
+                now.toLocaleString('pl-PL', { 
+                    day: '2-digit', 
+                    month: '2-digit', 
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+        }
+        updateTime();
+        setInterval(updateTime, 60000);
+
+        // =====================================================
+        // CHART TAB INTERACTION
+        // =====================================================
+        
+        document.querySelectorAll('.chart-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                this.parentElement.querySelectorAll('.chart-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

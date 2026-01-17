@@ -1,0 +1,43 @@
+# =====================================================
+# SENTINEL Portfolio Monitor - .gitignore
+# =====================================================
+
+# API Keys & Secrets (NIGDY nie commituj kluczy!)
+*.key
+*.secret
+.env
+.env.local
+.env.*.local
+
+# Google Apps Script
+.clasp.json
+appsscript.json
+
+# Logs
+*.log
+npm-debug.log*
+
+# System Files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Node (if added later)
+node_modules/
+dist/
+build/
+
+# Personal data
+credentials.json
+token.json
