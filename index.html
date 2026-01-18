@@ -1240,7 +1240,9 @@
                     <div class="stat-label">
                         <span class="stat-icon">📊</span> Pozycje
                     </div>
-                    <div class="stat-value">8</div>
+                    <div class="stat-value" id="positions-count">
+                        <div class="loader-spinner"></div>
+                    </div>
                     <div class="stat-change positive">
                         5 zyskownych / 3 stratnych
                     </div>
@@ -1297,31 +1299,32 @@
                     <div class="strategy-bar">
                         <div class="strategy-label">
                             <span>Core (ETF, REIT)</span>
-                            <span style="color: var(--neon-blue);">65%</span>
+                            <span id="core-strategy-percent">
+                                <div class="loader-spinner" style="width: 14px; height: 14px; border-width: 1px;"></div>
+                            </span>
                         </div>
                         <div class="strategy-progress">
-                            <div class="strategy-fill core" style="width: 65%;"></div>
+                            <div id="core-strategy-bar" class="strategy-fill core" style="width: 0%;"></div>
                         </div>
                     </div>
                     <div class="strategy-bar">
                         <div class="strategy-label">
                             <span>Satellites (Akcje)</span>
-                            <span style="color: var(--neon-purple);">35%</span>
+                            <span id="satellites-strategy-percent">
+                                <div class="loader-spinner" style="width: 14px; height: 14px; border-width: 1px;"></div>
+                            </span>
                         </div>
                         <div class="strategy-progress">
-                            <div class="strategy-fill satellites" style="width: 35%;"></div>
+                            <div id="satellites-strategy-bar" class="strategy-fill satellites" style="width: 0%;"></div>
                         </div>
                     </div>
                 </div>
                 <div class="glass-card">
                     <div class="panel-title">📰 Najnowsze Newsy</div>
-                    <div class="news-item">
-                        <div class="news-ticker">AAPL</div>
-                        <div class="news-text">Q4 earnings beat expectations, AI initiatives acceleration</div>
-                    </div>
-                    <div class="news-item">
-                        <div class="news-ticker">IONQ</div>
-                        <div class="news-text">Quantum computing milestone achieved, new partnerships</div>
+                    <div id="news-container">
+                        <div style="text-align: center; padding: 1rem;">
+                            <div class="loader-spinner"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1900,7 +1903,9 @@
 
             // Card 3: Positions count
             const posCount = summary.positionCount || 0;
-            cards[3].querySelector('.stat-value').textContent = posCount;
+            // Update value by ID
+            document.getElementById('positions-count').textContent = posCount;
+
             if (positions && positions.length > 0) {
                 const profitable = positions.filter(p => p.profitPLN >= 0).length;
                 const losing = positions.filter(p => p.profitPLN < 0).length;
@@ -1950,24 +1955,29 @@
 
         function updateStrategy(strategy) {
             if (!strategy) return;
-            const labels = document.querySelectorAll('.strategy-label span:last-child');
-            const bars = document.querySelectorAll('.strategy-fill');
 
-            labels[0].textContent = strategy.corePercent + '%';
-            bars[0].style.width = strategy.corePercent + '%';
+            // Core
+            const corePct = strategy.corePercent.toFixed(0) + '%';
+            document.getElementById('core-strategy-percent').textContent = corePct;
+            document.getElementById('core-strategy-bar').style.width = strategy.corePercent + '%';
 
-            labels[1].textContent = strategy.satellitesPercent + '%';
-            bars[1].style.width = strategy.satellitesPercent + '%';
+            // Satellites
+            const satPct = strategy.satellitesPercent.toFixed(0) + '%';
+            document.getElementById('satellites-strategy-percent').textContent = satPct;
+            document.getElementById('satellites-strategy-bar').style.width = strategy.satellitesPercent + '%';
         }
 
         function updateNews(news) {
-            if (!news || news.length === 0) return;
-            const container = document.querySelector('.info-panels .glass-card:last-child');
-            const title = container.querySelector('.panel-title');
-            container.innerHTML = '';
-            container.appendChild(title);
+            const container = document.getElementById('news-container');
+            if (!news || news.length === 0) {
+                container.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary);font-size:0.9rem;">Brak nowych wiadomości</div>';
+                return;
+            }
 
-            news.slice(0, 3).forEach(item => {
+            // Clear loader
+            container.innerHTML = '';
+
+            news.slice(0, 5).forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'news-item';
                 div.innerHTML = `
