@@ -1776,7 +1776,7 @@
                 statusEl.style.borderColor = 'rgba(0, 255, 136, 0.2)';
 
                 // Update Summary Stats
-                updateSummary(data.summary);
+                updateSummary(data.summary, data.positions);
 
                 // Update Positions Table
                 updatePositionsTable(data.positions);
@@ -1802,21 +1802,42 @@
             }
         }
 
-        function updateSummary(summary) {
+        function updateSummary(summary, positions) {
             const cards = document.querySelectorAll('.stat-card');
             if (!summary) return;
 
-            // Value
+            // Card 0: Value
             cards[0].querySelector('.stat-value').textContent = summary.totalValue.toLocaleString('pl-PL') + ' zł';
+            cards[0].querySelector('.stat-change').innerHTML = '↑ ' + summary.totalCost.toLocaleString('pl-PL') + ' zł zainwestowane';
 
-            // Profit
+            // Card 1: Profit
             const profitVal = cards[1].querySelector('.stat-value');
             profitVal.textContent = (summary.totalProfit > 0 ? '+' : '') + summary.totalProfit.toLocaleString('pl-PL') + ' zł';
             profitVal.className = 'stat-value ' + (summary.totalProfit >= 0 ? 'positive' : 'negative');
-            cards[1].querySelector('.stat-change').textContent = (summary.profitPercent > 0 ? '↑ ' : '↓ ') + summary.profitPercent + '% całkowicie';
+            const profitChange = cards[1].querySelector('.stat-change');
+            profitChange.textContent = (summary.profitPercent > 0 ? '↑ ' : '↓ ') + Math.abs(summary.profitPercent) + '% całkowicie';
+            profitChange.className = 'stat-change ' + (summary.totalProfit >= 0 ? 'positive' : 'negative');
 
-            // FX (optional placeholder if summary doesn't have it explicitly)
-            // positions table has FX, summary could sum it
+            // Card 2: FX Impact (sum from positions)
+            if (positions && positions.length > 0) {
+                let totalFX = 0;
+                positions.forEach(p => totalFX += p.fxImpact || 0);
+                const fxVal = cards[2].querySelector('.stat-value');
+                fxVal.textContent = (totalFX >= 0 ? '+' : '') + totalFX.toLocaleString('pl-PL') + ' zł';
+                fxVal.className = 'stat-value ' + (totalFX >= 0 ? 'positive' : 'negative');
+                const fxChange = cards[2].querySelector('.stat-change');
+                fxChange.textContent = totalFX >= 0 ? '↑ PLN osłabiony' : '↓ PLN umocniony';
+                fxChange.className = 'stat-change ' + (totalFX >= 0 ? 'positive' : 'negative');
+            }
+
+            // Card 3: Positions count
+            const posCount = summary.positionCount || 0;
+            cards[3].querySelector('.stat-value').textContent = posCount;
+            if (positions && positions.length > 0) {
+                const profitable = positions.filter(p => p.profitPLN >= 0).length;
+                const losing = positions.filter(p => p.profitPLN < 0).length;
+                cards[3].querySelector('.stat-change').textContent = profitable + ' zyskownych / ' + losing + ' stratnych';
+            }
         }
 
         function updatePositionsTable(positions) {
