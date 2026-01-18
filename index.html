@@ -1596,7 +1596,28 @@
                     </div>
                 </div>
 
+                <!-- TradingView Chart -->
+                <div class="tradingview-chart glass-card" id="chartSection"
+                    style="display:none; margin-bottom: 1.5rem;">
+                    <div class="section-title" style="margin-bottom: 1rem;">📈 Wykres techniczny</div>
+                    <div id="tradingviewWidget" style="height: 400px; border-radius: 12px; overflow: hidden;">
+                        <iframe id="tvChart" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
+                        <button class="chart-tab" onclick="setChartInterval('D')">1D</button>
+                        <button class="chart-tab active" onclick="setChartInterval('W')">1W</button>
+                        <button class="chart-tab" onclick="setChartInterval('M')">1M</button>
+                        <button class="chart-tab" onclick="setChartInterval('12M')">1Y</button>
+                        <a id="tvFullLink" href="#" target="_blank" class="chart-tab"
+                            style="margin-left: auto; text-decoration: none;">
+                            🔗 Otwórz w TradingView
+                        </a>
+                    </div>
+                </div>
+
                 <div class="indicators-grid" id="indicatorsGrid" style="display:none;">
+
                     <div class="indicator-card">
                         <div class="indicator-name">RSI (14)</div>
                         <div class="indicator-value neutral" id="ind-rsi">--</div>
@@ -2557,8 +2578,15 @@
 
         function displayAnalysis(data) {
             document.getElementById('gaugeSection').style.display = 'block';
+            document.getElementById('chartSection').style.display = 'block';
             document.getElementById('indicatorsGrid').style.display = 'grid';
             document.getElementById('analyzedTicker').textContent = data.ticker + ' - ' + (data.name || '');
+
+            // Update TradingView chart
+            currentChartTicker = data.ticker;
+            updateTradingViewChart(data.ticker, currentChartInterval);
+            document.getElementById('tvFullLink').href = 'https://www.tradingview.com/chart/?symbol=' + data.ticker;
+
             const score = data.buyScore || 50;
             const scoreEl = document.getElementById('gaugeScore');
             scoreEl.textContent = score;
@@ -2576,6 +2604,26 @@
             updateIndicator('sma', data.smaSignal, data.smaScore);
             updateIndicator('sentiment', data.sentiment, data.sentimentScore);
         }
+
+        // TradingView Chart Functions
+        let currentChartTicker = 'AAPL';
+        let currentChartInterval = 'W';
+
+        function updateTradingViewChart(ticker, interval) {
+            const iframe = document.getElementById('tvChart');
+            const tvInterval = interval === '12M' ? 'M' : interval;
+            iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${ticker}&interval=${tvInterval}&theme=dark&style=1&locale=en&hide_top_toolbar=1&hide_legend=0&save_image=0&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=0&studies=RSI%40tv-basicstudies&studies=MASimple%4050&studies=MASimple%40200`;
+        }
+
+        function setChartInterval(interval) {
+            currentChartInterval = interval;
+            document.querySelectorAll('#chartSection .chart-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            if (currentChartTicker) {
+                updateTradingViewChart(currentChartTicker, interval);
+            }
+        }
+
 
         function updateIndicator(id, value, score) {
             const valEl = document.getElementById('ind-' + id);
