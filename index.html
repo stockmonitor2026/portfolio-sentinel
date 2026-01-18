@@ -1166,13 +1166,19 @@
                 </div>
             </div>
             <div class="header-right">
-                <div class="live-indicator">
-                    <div class="live-dot"></div>
-                    LIVE
+                <div id="connectionStatus" class="live-indicator"
+                    style="background: rgba(255, 68, 102, 0.1); color: var(--neon-red); border-color: rgba(255, 68, 102, 0.2);">
+                    <div class="live-dot"
+                        style="background: var(--neon-red); box-shadow: 0 0 10px var(--neon-red-glow);"></div>
+                    OFFLINE
                 </div>
                 <div class="header-time">
-                    Aktualizacja: <span id="lastUpdate">17.01.2026, 23:15</span>
+                    Aktualizacja: <span id="lastUpdate">--.--.----, --:--</span>
                 </div>
+                <button onclick="logout()"
+                    style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s;">
+                    Wyloguj
+                </button>
             </div>
         </header>
 
@@ -1680,9 +1686,9 @@
         });
 
         // =====================================================
-        // PASSWORD PROTECTION
+        // CONFIGURATION & API
         // =====================================================
-
+        const API_URL = ''; // Paste your Google Apps Script Web App URL here
         const SENTINEL_PASSWORD = 'Snt1n3L_2026!';
         const SESSION_KEY = 'sentinel_session';
         const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
