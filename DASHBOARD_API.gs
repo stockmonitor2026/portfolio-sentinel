@@ -187,13 +187,12 @@ function getCurrencyRates_(ss) {
   const sheet = ss.getSheetByName(DASHBOARD_API_CONFIG.SHEET_PORTFEL);
   if (!sheet) return { USDPLN: 4.05, EURPLN: 4.25 };
   
-  // Szukamy kursów w komórkach (typowo N2 i N3 lub osobny arkusz)
   try {
-    // Próbujemy pobrać z KONFIGURACJA lub z formuły
-    const usdpln = parseFloat(sheet.getRange('I1').getValue()) || 4.05;
-    const eurpln = parseFloat(sheet.getRange('J1').getValue()) || 4.25;
+    // USD/PLN w N1, EUR/PLN w N2
+    const usdpln = parseFloat(sheet.getRange('N1').getValue()) || 4.05;
+    const eurpln = parseFloat(sheet.getRange('N2').getValue()) || 4.25;
     
-    // Fallback - szukamy w pierwszych wierszach
+    // Walidacja - kurs powinien być między 1 a 10
     if (usdpln < 1 || usdpln > 10) {
       return { USDPLN: 4.05, EURPLN: 4.25 };
     }
