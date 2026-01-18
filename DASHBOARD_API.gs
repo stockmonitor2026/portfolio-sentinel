@@ -71,6 +71,47 @@ function doGet(e) {
   }
 }
 
+/**
+ * Endpoint POST - czat z AI
+ * Body: { "question": "pytanie użytkownika" }
+ */
+function doPost(e) {
+  try {
+    const body = JSON.parse(e.postData.contents);
+    const question = body.question || '';
+    
+    if (!question || question.trim().length === 0) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          error: true,
+          message: 'Brak pytania',
+          code: 400
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    // Wywołaj asystenta AI
+    const response = ZAPYTAJ_ASYSTENTA(question);
+    
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        success: true,
+        response: response,
+        timestamp: new Date().toISOString()
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        error: true,
+        message: error.message,
+        code: 500
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
 // ═══════════════════════════════════════════════════════════════
 // 📊 POBIERANIE DANYCH
 // ═══════════════════════════════════════════════════════════════
@@ -200,7 +241,7 @@ function getCurrencyRates_(ss) {
     return {
       USDPLN: parseFloat(usdpln.toFixed(4)),
       EURPLN: parseFloat(eurpln.toFixed(4))
-    };
+    };https://script.google.com/macros/s/AKfycbxPhFXSyFg_zFg44MGHiYQrPHnvBEN-dpjMhsPT-97U-KoJpj1ukCGTAA1iwCP442IL/exec
   } catch (e) {
     return { USDPLN: 4.05, EURPLN: 4.25 };
   }

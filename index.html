@@ -1616,7 +1616,7 @@
             }
         }
 
-        function sendMessage() {
+        async function sendMessage() {
             const input = document.getElementById('chatInput');
             const message = input.value.trim();
             if (!message) return;
@@ -1632,27 +1632,52 @@
             input.value = '';
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            // Simulate AI response
-            setTimeout(() => {
+            // Show loading indicator
+            const loadingMsg = document.createElement('div');
+            loadingMsg.className = 'chat-message ai';
+            loadingMsg.innerHTML = '⏳ <em>SENTINEL myśli...</em>';
+            messagesContainer.appendChild(loadingMsg);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+
+            try {
+                // Call AI API
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ question: message })
+                });
+
+                const data = await response.json();
+
+                // Remove loading message
+                loadingMsg.remove();
+
+                // Add AI response
                 const aiMsg = document.createElement('div');
                 aiMsg.className = 'chat-message ai';
-                aiMsg.innerHTML = getAIResponse(message);
+
+                if (data.success && data.response) {
+                    // Format response with proper line breaks
+                    aiMsg.innerHTML = data.response.replace(/\n/g, '<br>');
+                } else if (data.error) {
+                    aiMsg.innerHTML = '❌ ' + (data.message || 'Błąd połączenia z AI');
+                } else {
+                    aiMsg.innerHTML = '🤔 Nie otrzymałem odpowiedzi. Spróbuj ponownie.';
+                }
+
                 messagesContainer.appendChild(aiMsg);
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            }, 1000);
-        }
 
-        function getAIResponse(message) {
-            const msg = message.toLowerCase();
+            } catch (error) {
+                // Remove loading message
+                loadingMsg.remove();
 
-            if (msg.includes('portfel') || msg.includes('ocena')) {
-                return '📊 <strong>Ocena portfela:</strong><br><br>Twój portfel ma solidną bazę z 65% w Core (ETF/REIT). Sugeruję doważenie VUAA do 75% udziału Core zgodnie ze strategią. IONQ i SOUN to spekulacje - trzymaj lub uśredniaj przy dalszych spadkach.';
-            } else if (msg.includes('aapl') || msg.includes('apple')) {
-                return '🍎 <strong>AAPL Analysis:</strong><br><br>Apple to Twoja najlepsza pozycja (+43% zysk). Solidna spółka z cash flow $100B+. Przy obecnej wycenie (P/E ~30) można trzymać długoterminowo. ✅ HOLD';
-            } else if (msg.includes('ionq') || msg.includes('quantum')) {
-                return '⚛️ <strong>IONQ:</strong><br><br>Spekulacyjna pozycja w quantum computing. Wysoki potencjał, ale też ryzyko. Firma pre-revenue stage. 🎰 KASYNO - trzymaj jako małą pozycję (max 5% portfela).';
-            } else {
-                return '🤔 Możesz zapytać mnie o:<br>• Ocenę portfela<br>• Analizę konkretnej spółki (np. "co z AAPL?")<br>• Strategię Core/Satellites<br>• Kurs walut i wpływ FX';
+                // Show error
+                const errorMsg = document.createElement('div');
+                errorMsg.className = 'chat-message ai';
+                errorMsg.innerHTML = '❌ Błąd połączenia. Sprawdź czy API działa.';
+                messagesContainer.appendChild(errorMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
         }
 
@@ -1688,7 +1713,7 @@
         // =====================================================
         // CONFIGURATION & API
         // =====================================================
-        const API_URL = 'https://script.google.com/macros/s/AKfycbzpOsh8_bu5-EU0TG8pTYbxqzFZDAhiD-ljk_q7ePuHOC6_JJ02xXjUF5Rthx5iJOy_/exec';
+        const API_URL = 'https://script.google.com/macros/s/AKfycbzhl46-SGIxjTSSgXqqBXpo99lQta7_Gx5VOIEcJYn_j5TCDI1JslHYdfLee-hVq15E/exec';
         const SENTINEL_PASSWORD = 'Snt1n3L_2026!';
         const SESSION_KEY = 'sentinel_session';
         const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
