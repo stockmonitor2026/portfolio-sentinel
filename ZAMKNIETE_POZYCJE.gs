@@ -511,8 +511,7 @@ function dodajMenuZamkniete_() {
 }
 
 /**
- * Handler dla onOpen - dodaje wszystkie menu
- */
+m2  */
 function onOpen() {
   // Menu zamkniętych pozycji
   dodajMenuZamkniete_();
@@ -522,3 +521,4 @@ function onOpen() {
     dodajMenuTransakcje_();
   }
 }
+
