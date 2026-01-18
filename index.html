@@ -1745,7 +1745,153 @@
         }
 
         // Check session on page load
-        document.addEventListener('DOMContentLoaded', checkSession);
+        document.addEventListener('DOMContentLoaded', () => {
+            if (checkSession()) {
+                updateDashboard();
+            }
+        });
+
+        // =====================================================
+        // DATA INTEGRATION
+        // =====================================================
+
+        async function updateDashboard() {
+            if (!API_URL) {
+                console.warn('API_URL not configured. Using demo data.');
+                return;
+            }
+
+            const statusEl = document.getElementById('connectionStatus');
+
+            try {
+                const response = await fetch(API_URL);
+                const data = await response.json();
+
+                if (data.error) throw new Error(data.message);
+
+                // Update Status
+                statusEl.innerHTML = '<div class="live-dot"></div> LIVE';
+                statusEl.style.background = 'rgba(0, 255, 136, 0.1)';
+                statusEl.style.color = 'var(--neon-green)';
+                statusEl.style.borderColor = 'rgba(0, 255, 136, 0.2)';
+
+                // Update Summary Stats
+                updateSummary(data.summary);
+
+                // Update Positions Table
+                updatePositionsTable(data.positions);
+
+                // Update Strategy
+                updateStrategy(data.strategy);
+
+                // Update News
+                updateNews(data.news);
+
+                // Update Charts
+                updateCharts(data);
+
+                // Update Time
+                const now = new Date();
+                document.getElementById('lastUpdate').textContent = now.toLocaleString('pl-PL');
+
+            } catch (err) {
+                console.error('Fetch error:', err);
+                statusEl.innerHTML = '<div class="live-dot" style="background: var(--neon-red);"></div> ERROR';
+                statusEl.style.background = 'rgba(255, 68, 102, 0.1)';
+                statusEl.style.color = 'var(--neon-red)';
+            }
+        }
+
+        function updateSummary(summary) {
+            const cards = document.querySelectorAll('.stat-card');
+            if (!summary) return;
+
+            // Value
+            cards[0].querySelector('.stat-value').textContent = summary.totalValue.toLocaleString('pl-PL') + ' zł';
+
+            // Profit
+            const profitVal = cards[1].querySelector('.stat-value');
+            profitVal.textContent = (summary.totalProfit > 0 ? '+' : '') + summary.totalProfit.toLocaleString('pl-PL') + ' zł';
+            profitVal.className = 'stat-value ' + (summary.totalProfit >= 0 ? 'positive' : 'negative');
+            cards[1].querySelector('.stat-change').textContent = (summary.profitPercent > 0 ? '↑ ' : '↓ ') + summary.profitPercent + '% całkowicie';
+
+            // FX (optional placeholder if summary doesn't have it explicitly)
+            // positions table has FX, summary could sum it
+        }
+
+        function updatePositionsTable(positions) {
+            const tbody = document.querySelector('.positions-table tbody');
+            if (!positions || positions.length === 0) return;
+
+            tbody.innerHTML = '';
+            positions.forEach(pos => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>
+                        <div class="ticker-cell">
+                            <div class="ticker-icon" style="background: var(--gradient-purple);">${pos.ticker[0]}</div>
+                            <div>
+                                <div class="ticker-name">${pos.ticker}</div>
+                                <div class="ticker-type">${pos.type} • ${pos.currency}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>${pos.quantity}</td>
+                    <td>${pos.avgPrice} ${pos.currency === 'USD' ? '$' : '€'}</td>
+                    <td>${pos.currentPrice} ${pos.currency === 'USD' ? '$' : '€'}</td>
+                    <td>${pos.valuePLN.toLocaleString('pl-PL')} zł</td>
+                    <td class="value-cell ${pos.profitPLN >= 0 ? 'positive' : 'negative'}">
+                        ${pos.profitPLN >= 0 ? '+' : ''}${pos.profitPLN.toLocaleString('pl-PL')} zł
+                    </td>
+                    <td>
+                        <span class="fx-badge ${pos.fxImpact >= 0 ? 'positive' : 'negative'}">
+                            ${pos.fxImpact >= 0 ? '+' : ''}${pos.fxImpact.toLocaleString('pl-PL')} zł
+                        </span>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateStrategy(strategy) {
+            if (!strategy) return;
+            const labels = document.querySelectorAll('.strategy-label span:last-child');
+            const bars = document.querySelectorAll('.strategy-fill');
+
+            labels[0].textContent = strategy.corePercent + '%';
+            bars[0].style.width = strategy.corePercent + '%';
+
+            labels[1].textContent = strategy.satellitesPercent + '%';
+            bars[1].style.width = strategy.satellitesPercent + '%';
+        }
+
+        function updateNews(news) {
+            if (!news || news.length === 0) return;
+            const container = document.querySelector('.info-panels .glass-card:last-child');
+            const title = container.querySelector('.panel-title');
+            container.innerHTML = '';
+            container.appendChild(title);
+
+            news.slice(0, 3).forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'news-item';
+                div.innerHTML = `
+                    <div class="news-ticker">${item.ticker}</div>
+                    <div class="news-text">${item.title}</div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function updateCharts(data) {
+            // Update Allocation Chart
+            const labels = data.positions.slice(0, 6).map(p => p.ticker);
+            const values = data.positions.slice(0, 6).map(p => p.valuePLN);
+
+            allocationChart.data.labels = labels;
+            allocationChart.data.datasets[0].data = values;
+            allocationChart.update();
+        }
     </script>
 </body>
 
