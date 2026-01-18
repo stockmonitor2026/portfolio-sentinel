@@ -1256,11 +1256,11 @@
                     <div class="fx-rates">
                         <div class="fx-rate">
                             <span class="fx-pair">🇺🇸 USD/PLN</span>
-                            <span class="fx-value">4,0547</span>
+                            <span class="fx-value" id="usdpln-rate">--</span>
                         </div>
                         <div class="fx-rate">
                             <span class="fx-pair">🇪🇺 EUR/PLN</span>
-                            <span class="fx-value">4,2134</span>
+                            <span class="fx-value" id="eurpln-rate">--</span>
                         </div>
                     </div>
                 </div>
@@ -1790,6 +1790,9 @@
                 // Update Charts
                 updateCharts(data);
 
+                // Update Currency Rates
+                updateCurrencies(data.currencies);
+
                 // Update Time
                 const now = new Date();
                 document.getElementById('lastUpdate').textContent = now.toLocaleString('pl-PL');
@@ -1912,6 +1915,18 @@
             allocationChart.data.labels = labels;
             allocationChart.data.datasets[0].data = values;
             allocationChart.update();
+        }
+
+        function updateCurrencies(currencies) {
+            if (!currencies) return;
+            const usdEl = document.getElementById('usdpln-rate');
+            const eurEl = document.getElementById('eurpln-rate');
+            if (usdEl && currencies.USDPLN) {
+                usdEl.textContent = currencies.USDPLN.toFixed(4).replace('.', ',');
+            }
+            if (eurEl && currencies.EURPLN) {
+                eurEl.textContent = currencies.EURPLN.toFixed(4).replace('.', ',');
+            }
         }
     </script>
 </body>
