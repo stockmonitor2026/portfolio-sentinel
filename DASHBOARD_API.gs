@@ -241,7 +241,7 @@ function getCurrencyRates_(ss) {
     return {
       USDPLN: parseFloat(usdpln.toFixed(4)),
       EURPLN: parseFloat(eurpln.toFixed(4))
-    };https://script.google.com/macros/s/AKfycbxPhFXSyFg_zFg44MGHiYQrPHnvBEN-dpjMhsPT-97U-KoJpj1ukCGTAA1iwCP442IL/exec
+    };
   } catch (e) {
     return { USDPLN: 4.05, EURPLN: 4.25 };
   }
