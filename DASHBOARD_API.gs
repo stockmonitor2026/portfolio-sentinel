@@ -40,19 +40,6 @@ const DASHBOARD_API_CONFIG = {
  * Główny endpoint GET - zwraca dane portfela jako JSON
  */
 function doGet(e) {
-  // Sprawdź klucz API
-  const providedKey = e.parameter.key || '';
-  
-  if (providedKey !== DASHBOARD_API_CONFIG.API_KEY) {
-    return ContentService
-      .createTextOutput(JSON.stringify({
-        error: true,
-        message: 'Invalid API key',
-        code: 401
-      }))
-      .setMimeType(ContentService.MimeType.JSON);
-  }
-  
   try {
     const data = getPortfolioData_();
     
