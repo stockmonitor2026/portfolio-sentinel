@@ -1123,6 +1123,24 @@
         ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.2);
         }
+
+        /* Loading Spinner */
+        .loader-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--neon-blue);
+            animation: spin 0.8s ease-in-out infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
     </style>
 </head>
 
@@ -1189,7 +1207,9 @@
                     <div class="stat-label">
                         <span class="stat-icon">💼</span> Wartość Portfolio
                     </div>
-                    <div class="stat-value">24 683,54 zł</div>
+                    <div class="stat-value" id="total-value">
+                        <div class="loader-spinner"></div>
+                    </div>
                     <div class="stat-change positive">
                         ↑ +1 892,45 zł (+8,3%)
                     </div>
@@ -1198,7 +1218,9 @@
                     <div class="stat-label">
                         <span class="stat-icon">📈</span> Zysk Całkowity
                     </div>
-                    <div class="stat-value positive">+2 156,78 zł</div>
+                    <div class="stat-value positive" id="total-profit">
+                        <div class="loader-spinner"></div>
+                    </div>
                     <div class="stat-change positive">
                         ↑ +234,12 zł dziś
                     </div>
@@ -1207,7 +1229,9 @@
                     <div class="stat-label">
                         <span class="stat-icon">💱</span> Wpływ FX
                     </div>
-                    <div class="stat-value positive">+892,34 zł</div>
+                    <div class="stat-value positive" id="total-fx">
+                        <div class="loader-spinner"></div>
+                    </div>
                     <div class="stat-change positive">
                         ↑ PLN osłabiony +2,1%
                     </div>
@@ -1256,11 +1280,15 @@
                     <div class="fx-rates">
                         <div class="fx-rate">
                             <span class="fx-pair">🇺🇸 USD/PLN</span>
-                            <span class="fx-value" id="usdpln-rate">--</span>
+                            <span class="fx-value" id="usdpln-rate">
+                                <div class="loader-spinner"></div>
+                            </span>
                         </div>
                         <div class="fx-rate">
                             <span class="fx-pair">🇪🇺 EUR/PLN</span>
-                            <span class="fx-value" id="eurpln-rate">--</span>
+                            <span class="fx-value" id="eurpln-rate">
+                                <div class="loader-spinner"></div>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -1317,7 +1345,7 @@
                                 <th>Wpływ FX</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="positionsTableBody" style="display: none;">
                             <tr>
                                 <td>
                                     <div class="ticker-cell">
@@ -1434,6 +1462,11 @@
                             </tr>
                         </tbody>
                     </table>
+                    <div id="tableLoader" style="text-align: center; padding: 2rem;">
+                        <div class="loader-spinner"></div>
+                        <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">Ładowanie
+                            pozycji...</div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -1789,6 +1822,12 @@
 
             const statusEl = document.getElementById('connectionStatus');
 
+            // Connecting state
+            statusEl.innerHTML = '<div class="live-dot" style="background: var(--neon-blue); animation: pulse 1s infinite;"></div> Łączenie...';
+            statusEl.style.color = 'var(--neon-blue)';
+            statusEl.style.borderColor = 'rgba(0, 212, 255, 0.2)';
+            statusEl.style.background = 'rgba(0, 212, 255, 0.1)';
+
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
@@ -1870,7 +1909,13 @@
         }
 
         function updatePositionsTable(positions) {
+            // Remove Loader
+            const loader = document.getElementById('tableLoader');
+            if (loader) loader.style.display = 'none';
+
             const tbody = document.querySelector('.positions-table tbody');
+            tbody.style.display = ''; // Show table
+
             if (!positions || positions.length === 0) return;
 
             tbody.innerHTML = '';
