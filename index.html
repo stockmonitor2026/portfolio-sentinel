@@ -1124,6 +1124,368 @@
             background: rgba(255, 255, 255, 0.2);
         }
 
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: .5rem;
+            margin-bottom: 2rem;
+            padding: .5rem;
+            background: var(--glass-bg);
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            width: fit-content
+        }
+
+        .nav-tab {
+            padding: .75rem 1.5rem;
+            border-radius: 12px;
+            font-size: .9rem;
+            font-weight: 600;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all .2s;
+            display: flex;
+            align-items: center;
+            gap: .5rem
+        }
+
+        .nav-tab:hover {
+            background: rgba(255, 255, 255, .05);
+            color: var(--text-primary)
+        }
+
+        .nav-tab.active {
+            background: var(--gradient-header);
+            color: #fff;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, .4)
+        }
+
+        .buyzone-section {
+            display: none
+        }
+
+        .buyzone-section.active {
+            display: block
+        }
+
+        .portfolio-section.hidden {
+            display: none
+        }
+
+        .btn-import {
+            display: flex;
+            align-items: center;
+            gap: .5rem;
+            padding: .6rem 1.2rem;
+            background: rgba(0, 212, 255, .1);
+            border: 1px solid rgba(0, 212, 255, .3);
+            border-radius: 10px;
+            color: var(--neon-blue);
+            font-size: .85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .btn-import:hover {
+            background: rgba(0, 212, 255, .2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 212, 255, .3)
+        }
+
+        .buyzone-gauge {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            margin-bottom: 1.5rem
+        }
+
+        .gauge-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 1.5rem
+        }
+
+        .gauge-bar {
+            height: 24px;
+            background: linear-gradient(90deg, #ff4466 0%, #ff6b8a 20%, #fbbf24 40%, #84cc16 60%, #00ff88 80%, #00ff88 100%);
+            border-radius: 12px;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 0, 0, .3)
+        }
+
+        .gauge-pointer {
+            position: absolute;
+            top: -8px;
+            width: 4px;
+            height: 40px;
+            background: #fff;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, .5);
+            transition: left .5s cubic-bezier(.4, 0, .2, 1)
+        }
+
+        .gauge-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: .75rem;
+            font-size: .8rem;
+            color: var(--text-secondary)
+        }
+
+        .gauge-score {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: .5rem
+        }
+
+        .gauge-score.low {
+            color: var(--neon-red)
+        }
+
+        .gauge-score.medium {
+            color: var(--neon-yellow)
+        }
+
+        .gauge-score.high {
+            color: var(--neon-green)
+        }
+
+        .gauge-label {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem
+        }
+
+        .stock-search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            max-width: 500px
+        }
+
+        .stock-search-input {
+            flex: 1;
+            padding: 1rem 1.5rem;
+            background: rgba(255, 255, 255, .05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            outline: none;
+            transition: all .2s
+        }
+
+        .stock-search-input:focus {
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue-glow)
+        }
+
+        .stock-search-input::placeholder {
+            color: var(--text-muted)
+        }
+
+        .btn-analyze {
+            padding: 1rem 2rem;
+            background: var(--gradient-header);
+            border: none;
+            border-radius: 12px;
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all .2s;
+            white-space: nowrap
+        }
+
+        .btn-analyze:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, .4)
+        }
+
+        .btn-analyze:disabled {
+            opacity: .5;
+            cursor: not-allowed;
+            transform: none
+        }
+
+        .indicators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem
+        }
+
+        .indicator-card {
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 1.25rem
+        }
+
+        .indicator-name {
+            font-size: .8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: .5rem
+        }
+
+        .indicator-value {
+            font-size: 1.5rem;
+            font-weight: 700
+        }
+
+        .indicator-value.bullish {
+            color: var(--neon-green)
+        }
+
+        .indicator-value.bearish {
+            color: var(--neon-red)
+        }
+
+        .indicator-value.neutral {
+            color: var(--neon-yellow)
+        }
+
+        .indicator-status {
+            font-size: .85rem;
+            margin-top: .25rem
+        }
+
+        .watchlist-section {
+            margin-top: 2rem
+        }
+
+        .watchlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem
+        }
+
+        .watchlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: .75rem
+        }
+
+        .watchlist-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: .75rem 1rem;
+            background: rgba(255, 255, 255, .03);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .watchlist-item:hover {
+            background: rgba(255, 255, 255, .06);
+            border-color: var(--neon-blue)
+        }
+
+        .watchlist-item .ticker {
+            font-weight: 700
+        }
+
+        .watchlist-item .score {
+            font-size: .9rem;
+            padding: .25rem .5rem;
+            border-radius: 6px
+        }
+
+        .watchlist-item .score.high {
+            background: rgba(0, 255, 136, .15);
+            color: var(--neon-green)
+        }
+
+        .watchlist-item .score.medium {
+            background: rgba(251, 191, 36, .15);
+            color: var(--neon-yellow)
+        }
+
+        .watchlist-item .score.low {
+            background: rgba(255, 68, 102, .15);
+            color: var(--neon-red)
+        }
+
+        .import-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .8);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center
+        }
+
+        .import-modal.open {
+            display: flex
+        }
+
+        .import-box {
+            background: var(--glass-bg);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            text-align: center
+        }
+
+        .import-dropzone {
+            border: 2px dashed var(--glass-border);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            margin: 1.5rem 0;
+            cursor: pointer;
+            transition: all .2s
+        }
+
+        .import-dropzone:hover,
+        .import-dropzone.dragover {
+            border-color: var(--neon-blue);
+            background: rgba(0, 212, 255, .05)
+        }
+
+        .import-dropzone-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem
+        }
+
+        .import-result {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 12px;
+            display: none
+        }
+
+        .import-result.success {
+            display: block;
+            background: rgba(0, 255, 136, .1);
+            border: 1px solid rgba(0, 255, 136, .2);
+            color: var(--neon-green)
+        }
+
+        .import-result.error {
+            display: block;
+            background: rgba(255, 68, 102, .1);
+            border: 1px solid rgba(255, 68, 102, .2);
+            color: var(--neon-red)
+        }
+
         /* Loading Spinner */
         .loader-spinner {
             width: 20px;
@@ -1193,6 +1555,8 @@
                 <div class="header-time">
                     Aktualizacja: <span id="lastUpdate">--.--.----, --:--</span>
                 </div>
+                <button class="btn-import" onclick="openImportModal()">📥 Import CSV</button>
+                <input type="file" id="csvFileInput" accept=".csv" style="display:none" onchange="handleCsvFile(event)">
                 <button onclick="logout()"
                     style="background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); color: var(--text-secondary); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem; transition: all 0.2s;">
                     Wyloguj
@@ -1201,278 +1565,384 @@
         </header>
 
         <main class="main">
-            <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card glass-card">
-                    <div class="stat-label">
-                        <span class="stat-icon">💼</span> Wartość Portfolio
-                    </div>
-                    <div class="stat-value" id="total-value">
-                        <div class="loader-spinner"></div>
-                    </div>
-                    <div class="stat-change positive">
-                        ↑ +1 892,45 zł (+8,3%)
+            <!-- Navigation Tabs -->
+            <div class="nav-tabs">
+                <button class="nav-tab active" onclick="switchTab('portfolio')">📊 Portfolio</button>
+                <button class="nav-tab" onclick="switchTab('buyzone')">🎯 Buy Zone</button>
+            </div>
+
+            <!-- Buy Zone Section -->
+            <div class="buyzone-section" id="buyzoneSection">
+                <div class="stock-search-container">
+                    <input type="text" class="stock-search-input" id="stockSearchInput"
+                        placeholder="Wpisz ticker (np. AAPL, MSFT, NVDA)..."
+                        onkeypress="if(event.key==='Enter')analyzeStock()">
+                    <button class="btn-analyze" id="analyzeBtn" onclick="analyzeStock()">🔍 Analizuj</button>
+                </div>
+
+                <div class="buyzone-gauge glass-card" id="gaugeSection" style="display:none;">
+                    <h2 id="analyzedTicker" style="margin-bottom:1rem;">AAPL</h2>
+                    <div class="gauge-score high" id="gaugeScore">--</div>
+                    <div class="gauge-label" id="gaugeLabel">Wpisz ticker aby rozpocząć</div>
+                    <div class="gauge-container">
+                        <div class="gauge-bar">
+                            <div class="gauge-pointer" id="gaugePointer" style="left:50%;"></div>
+                        </div>
+                        <div class="gauge-labels">
+                            <span>🔴 Drogo</span>
+                            <span>🟡 Neutralnie</span>
+                            <span>🟢 Okazja</span>
+                        </div>
                     </div>
                 </div>
-                <div class="stat-card glass-card">
-                    <div class="stat-label">
-                        <span class="stat-icon">📈</span> Zysk Całkowity
+
+                <div class="indicators-grid" id="indicatorsGrid" style="display:none;">
+                    <div class="indicator-card">
+                        <div class="indicator-name">RSI (14)</div>
+                        <div class="indicator-value neutral" id="ind-rsi">--</div>
+                        <div class="indicator-status" id="ind-rsi-status">--</div>
                     </div>
-                    <div class="stat-value positive" id="total-profit">
-                        <div class="loader-spinner"></div>
+                    <div class="indicator-card">
+                        <div class="indicator-name">P/E Ratio</div>
+                        <div class="indicator-value neutral" id="ind-pe">--</div>
+                        <div class="indicator-status" id="ind-pe-status">--</div>
                     </div>
-                    <div class="stat-change positive">
-                        ↑ +234,12 zł dziś
+                    <div class="indicator-card">
+                        <div class="indicator-name">vs 52W Low/High</div>
+                        <div class="indicator-value neutral" id="ind-52w">--</div>
+                        <div class="indicator-status" id="ind-52w-status">--</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-name">SMA 50/200</div>
+                        <div class="indicator-value neutral" id="ind-sma">--</div>
+                        <div class="indicator-status" id="ind-sma-status">--</div>
+                    </div>
+                    <div class="indicator-card">
+                        <div class="indicator-name">Sentiment</div>
+                        <div class="indicator-value neutral" id="ind-sentiment">--</div>
+                        <div class="indicator-status" id="ind-sentiment-status">--</div>
                     </div>
                 </div>
-                <div class="stat-card glass-card">
-                    <div class="stat-label">
-                        <span class="stat-icon">💱</span> Wpływ FX
+
+                <div class="watchlist-section glass-card">
+                    <div class="watchlist-header">
+                        <div class="section-title">👀 Watchlista</div>
+                        <button class="chart-tab" onclick="addToWatchlist()">+ Dodaj obecną</button>
                     </div>
-                    <div class="stat-value positive" id="total-fx">
-                        <div class="loader-spinner"></div>
-                    </div>
-                    <div class="stat-change positive">
-                        ↑ PLN osłabiony +2,1%
-                    </div>
-                </div>
-                <div class="stat-card glass-card">
-                    <div class="stat-label">
-                        <span class="stat-icon">📊</span> Pozycje
-                    </div>
-                    <div class="stat-value" id="positions-count">
-                        <div class="loader-spinner"></div>
-                    </div>
-                    <div class="stat-change positive">
-                        5 zyskownych / 3 stratnych
+                    <div class="watchlist-grid" id="watchlistGrid">
+                        <div class="watchlist-item" onclick="analyzeFromWatchlist('AAPL')">
+                            <span class="ticker">AAPL</span>
+                            <span class="score high">--</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Charts Section -->
-            <div class="charts-section">
-                <div class="chart-card glass-card">
-                    <div class="chart-header">
-                        <div class="chart-title">📊 Wartość Portfolio</div>
-                        <div class="chart-tabs">
-                            <button class="chart-tab">1D</button>
-                            <button class="chart-tab active">1W</button>
-                            <button class="chart-tab">1M</button>
-                            <button class="chart-tab">YTD</button>
+            <!-- Portfolio Section -->
+            <div class="portfolio-section">
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card glass-card">
+                        <div class="stat-label">
+                            <span class="stat-icon">💼</span> Wartość Portfolio
                         </div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="portfolioChart"></canvas>
-                    </div>
-                </div>
-                <div class="chart-card glass-card">
-                    <div class="chart-header">
-                        <div class="chart-title">🥧 Alokacja</div>
-                    </div>
-                    <div class="chart-container">
-                        <canvas id="allocationChart"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Info Panels -->
-            <div class="info-panels">
-                <div class="glass-card">
-                    <div class="panel-title">💱 Kursy Walut</div>
-                    <div class="fx-rates">
-                        <div class="fx-rate">
-                            <span class="fx-pair">🇺🇸 USD/PLN</span>
-                            <span class="fx-value" id="usdpln-rate">
-                                <div class="loader-spinner"></div>
-                            </span>
-                        </div>
-                        <div class="fx-rate">
-                            <span class="fx-pair">🇪🇺 EUR/PLN</span>
-                            <span class="fx-value" id="eurpln-rate">
-                                <div class="loader-spinner"></div>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card">
-                    <div class="panel-title">🎯 Strategia Core/Satellites</div>
-                    <div class="strategy-bar">
-                        <div class="strategy-label">
-                            <span>Core (ETF, REIT)</span>
-                            <span id="core-strategy-percent">
-                                <div class="loader-spinner" style="width: 14px; height: 14px; border-width: 1px;"></div>
-                            </span>
-                        </div>
-                        <div class="strategy-progress">
-                            <div id="core-strategy-bar" class="strategy-fill core" style="width: 0%;"></div>
-                        </div>
-                    </div>
-                    <div class="strategy-bar">
-                        <div class="strategy-label">
-                            <span>Satellites (Akcje)</span>
-                            <span id="satellites-strategy-percent">
-                                <div class="loader-spinner" style="width: 14px; height: 14px; border-width: 1px;"></div>
-                            </span>
-                        </div>
-                        <div class="strategy-progress">
-                            <div id="satellites-strategy-bar" class="strategy-fill satellites" style="width: 0%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="glass-card">
-                    <div class="panel-title">📰 Najnowsze Newsy</div>
-                    <div id="news-container">
-                        <div style="text-align: center; padding: 1rem;">
+                        <div class="stat-value" id="total-value">
                             <div class="loader-spinner"></div>
                         </div>
+                        <div class="stat-change positive">
+                            ↑ +1 892,45 zł (+8,3%)
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-label">
+                            <span class="stat-icon">📈</span> Zysk Całkowity
+                        </div>
+                        <div class="stat-value positive" id="total-profit">
+                            <div class="loader-spinner"></div>
+                        </div>
+                        <div class="stat-change positive">
+                            ↑ +234,12 zł dziś
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-label">
+                            <span class="stat-icon">💱</span> Wpływ FX
+                        </div>
+                        <div class="stat-value positive" id="total-fx">
+                            <div class="loader-spinner"></div>
+                        </div>
+                        <div class="stat-change positive">
+                            ↑ PLN osłabiony +2,1%
+                        </div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-label">
+                            <span class="stat-icon">📊</span> Pozycje
+                        </div>
+                        <div class="stat-value" id="positions-count">
+                            <div class="loader-spinner"></div>
+                        </div>
+                        <div class="stat-change positive">
+                            5 zyskownych / 3 stratnych
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Positions Table -->
-            <div class="positions-section glass-card">
-                <div class="section-header">
-                    <div class="section-title">📋 Twoje Pozycje</div>
-                    <button class="chart-tab active">Sortuj: Wartość ↓</button>
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-card glass-card">
+                        <div class="chart-header">
+                            <div class="chart-title">📊 Wartość Portfolio</div>
+                            <div class="chart-tabs">
+                                <button class="chart-tab">1D</button>
+                                <button class="chart-tab active">1W</button>
+                                <button class="chart-tab">1M</button>
+                                <button class="chart-tab">YTD</button>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="portfolioChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="chart-card glass-card">
+                        <div class="chart-header">
+                            <div class="chart-title">🥧 Alokacja</div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="allocationChart"></canvas>
+                        </div>
+                    </div>
                 </div>
-                <div class="table-wrapper">
-                    <table class="positions-table">
-                        <thead>
-                            <tr>
-                                <th>Ticker</th>
-                                <th>Ilość</th>
-                                <th>Cena Śr.</th>
-                                <th>Cena Live</th>
-                                <th>Wartość PLN</th>
-                                <th>Zysk/Strata</th>
-                                <th>Wpływ FX</th>
-                            </tr>
-                        </thead>
-                        <tbody id="positionsTableBody" style="display: none;">
-                            <tr>
-                                <td>
-                                    <div class="ticker-cell">
-                                        <div class="ticker-icon"
-                                            style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">🍎
-                                        </div>
-                                        <div>
-                                            <div class="ticker-name">AAPL</div>
-                                            <div class="ticker-type">AKCJA • USD</div>
-                                        </div>
+
+                <!-- Info Panels -->
+                <div class="info-panels">
+                    <div class="glass-card">
+                        <div class="panel-title">💱 Kursy Walut</div>
+                        <div class="fx-rates">
+                            <div class="fx-rate">
+                                <span class="fx-pair">🇺🇸 USD/PLN</span>
+                                <span class="fx-value" id="usdpln-rate">
+                                    <div class="loader-spinner"></div>
+                                </span>
+                            </div>
+                            <div class="fx-rate">
+                                <span class="fx-pair">🇪🇺 EUR/PLN</span>
+                                <span class="fx-value" id="eurpln-rate">
+                                    <div class="loader-spinner"></div>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="panel-title">🎯 Strategia Core/Satellites</div>
+                        <div class="strategy-bar">
+                            <div class="strategy-label">
+                                <span>Core (ETF, REIT)</span>
+                                <span id="core-strategy-percent">
+                                    <div class="loader-spinner" style="width: 14px; height: 14px; border-width: 1px;">
                                     </div>
-                                </td>
-                                <td>5</td>
-                                <td>180,00 $</td>
-                                <td>229,00 $</td>
-                                <td>4 650,58 zł</td>
-                                <td class="value-cell positive">+1 683,54 zł</td>
-                                <td><span class="fx-badge positive">+380,04 zł</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="ticker-cell">
-                                        <div class="ticker-icon"
-                                            style="background: linear-gradient(135deg, #1877f2 0%, #0d65d9 100%);">Ⓜ️
-                                        </div>
-                                        <div>
-                                            <div class="ticker-name">META</div>
-                                            <div class="ticker-type">AKCJA • USD</div>
-                                        </div>
+                                </span>
+                            </div>
+                            <div class="strategy-progress">
+                                <div id="core-strategy-bar" class="strategy-fill core" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div class="strategy-bar">
+                            <div class="strategy-label">
+                                <span>Satellites (Akcje)</span>
+                                <span id="satellites-strategy-percent">
+                                    <div class="loader-spinner" style="width: 14px; height: 14px; border-width: 1px;">
                                     </div>
-                                </td>
-                                <td>0.45</td>
-                                <td>660,00 $</td>
-                                <td>712,45 $</td>
-                                <td>1 163,12 zł</td>
-                                <td class="value-cell positive">+234,56 zł</td>
-                                <td><span class="fx-badge positive">+45,23 zł</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="ticker-cell">
-                                        <div class="ticker-icon"
-                                            style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">⚛️
+                                </span>
+                            </div>
+                            <div class="strategy-progress">
+                                <div id="satellites-strategy-bar" class="strategy-fill satellites" style="width: 0%;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <div class="panel-title">📰 Najnowsze Newsy</div>
+                        <div id="news-container">
+                            <div style="text-align: center; padding: 1rem;">
+                                <div class="loader-spinner"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Positions Table -->
+                <div class="positions-section glass-card">
+                    <div class="section-header">
+                        <div class="section-title">📋 Twoje Pozycje</div>
+                        <button class="chart-tab active">Sortuj: Wartość ↓</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="positions-table">
+                            <thead>
+                                <tr>
+                                    <th>Ticker</th>
+                                    <th>Ilość</th>
+                                    <th>Cena Śr.</th>
+                                    <th>Cena Live</th>
+                                    <th>Wartość PLN</th>
+                                    <th>Zysk/Strata</th>
+                                    <th>Wpływ FX</th>
+                                </tr>
+                            </thead>
+                            <tbody id="positionsTableBody" style="display: none;">
+                                <tr>
+                                    <td>
+                                        <div class="ticker-cell">
+                                            <div class="ticker-icon"
+                                                style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                                                🍎
+                                            </div>
+                                            <div>
+                                                <div class="ticker-name">AAPL</div>
+                                                <div class="ticker-type">AKCJA • USD</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="ticker-name">IONQ</div>
-                                            <div class="ticker-type">AKCJA • USD</div>
+                                    </td>
+                                    <td>5</td>
+                                    <td>180,00 $</td>
+                                    <td>229,00 $</td>
+                                    <td>4 650,58 zł</td>
+                                    <td class="value-cell positive">+1 683,54 zł</td>
+                                    <td><span class="fx-badge positive">+380,04 zł</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ticker-cell">
+                                            <div class="ticker-icon"
+                                                style="background: linear-gradient(135deg, #1877f2 0%, #0d65d9 100%);">
+                                                Ⓜ️
+                                            </div>
+                                            <div>
+                                                <div class="ticker-name">META</div>
+                                                <div class="ticker-type">AKCJA • USD</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>1.50</td>
-                                <td>51,65 $</td>
-                                <td>48,60 $</td>
-                                <td>264,82 zł</td>
-                                <td class="value-cell negative">-15,69 zł</td>
-                                <td><span class="fx-badge positive">+1,04 zł</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="ticker-cell">
-                                        <div class="ticker-icon"
-                                            style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">📊
+                                    </td>
+                                    <td>0.45</td>
+                                    <td>660,00 $</td>
+                                    <td>712,45 $</td>
+                                    <td>1 163,12 zł</td>
+                                    <td class="value-cell positive">+234,56 zł</td>
+                                    <td><span class="fx-badge positive">+45,23 zł</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ticker-cell">
+                                            <div class="ticker-icon"
+                                                style="background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);">
+                                                ⚛️
+                                            </div>
+                                            <div>
+                                                <div class="ticker-name">IONQ</div>
+                                                <div class="ticker-type">AKCJA • USD</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="ticker-name">VUAA</div>
-                                            <div class="ticker-type">ETF • EUR</div>
+                                    </td>
+                                    <td>1.50</td>
+                                    <td>51,65 $</td>
+                                    <td>48,60 $</td>
+                                    <td>264,82 zł</td>
+                                    <td class="value-cell negative">-15,69 zł</td>
+                                    <td><span class="fx-badge positive">+1,04 zł</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ticker-cell">
+                                            <div class="ticker-icon"
+                                                style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);">
+                                                📊
+                                            </div>
+                                            <div>
+                                                <div class="ticker-name">VUAA</div>
+                                                <div class="ticker-type">ETF • EUR</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>2.73</td>
-                                <td>113,50 €</td>
-                                <td>115,46 €</td>
-                                <td>1 328,45 zł</td>
-                                <td class="value-cell positive">+67,89 zł</td>
-                                <td><span class="fx-badge negative">-12,34 zł</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="ticker-cell">
-                                        <div class="ticker-icon"
-                                            style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">🔊
+                                    </td>
+                                    <td>2.73</td>
+                                    <td>113,50 €</td>
+                                    <td>115,46 €</td>
+                                    <td>1 328,45 zł</td>
+                                    <td class="value-cell positive">+67,89 zł</td>
+                                    <td><span class="fx-badge negative">-12,34 zł</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ticker-cell">
+                                            <div class="ticker-icon"
+                                                style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                                                🔊
+                                            </div>
+                                            <div>
+                                                <div class="ticker-name">SOUN</div>
+                                                <div class="ticker-type">AKCJA • USD</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div class="ticker-name">SOUN</div>
-                                            <div class="ticker-type">AKCJA • USD</div>
+                                    </td>
+                                    <td>1.51</td>
+                                    <td>19,37 $</td>
+                                    <td>10,92 $</td>
+                                    <td>59,81 zł</td>
+                                    <td class="value-cell negative">-46,47 zł</td>
+                                    <td><span class="fx-badge negative">-3,21 zł</span></td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="ticker-cell">
+                                            <div class="ticker-icon"
+                                                style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">
+                                                🏢
+                                            </div>
+                                            <div>
+                                                <div class="ticker-name">O</div>
+                                                <div class="ticker-type">REIT • USD</div>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>1.51</td>
-                                <td>19,37 $</td>
-                                <td>10,92 $</td>
-                                <td>59,81 zł</td>
-                                <td class="value-cell negative">-46,47 zł</td>
-                                <td><span class="fx-badge negative">-3,21 zł</span></td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <div class="ticker-cell">
-                                        <div class="ticker-icon"
-                                            style="background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);">🏢
-                                        </div>
-                                        <div>
-                                            <div class="ticker-name">O</div>
-                                            <div class="ticker-type">REIT • USD</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>10</td>
-                                <td>52,00 $</td>
-                                <td>54,80 $</td>
-                                <td>2 221,96 zł</td>
-                                <td class="value-cell positive">+113,58 zł</td>
-                                <td><span class="fx-badge positive">+89,21 zł</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div id="tableLoader" style="text-align: center; padding: 2rem;">
-                        <div class="loader-spinner"></div>
-                        <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">Ładowanie
-                            pozycji...</div>
+                                    </td>
+                                    <td>10</td>
+                                    <td>52,00 $</td>
+                                    <td>54,80 $</td>
+                                    <td>2 221,96 zł</td>
+                                    <td class="value-cell positive">+113,58 zł</td>
+                                    <td><span class="fx-badge positive">+89,21 zł</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div id="tableLoader" style="text-align: center; padding: 2rem;">
+                            <div class="loader-spinner"></div>
+                            <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">Ładowanie
+                                pozycji...</div>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- End Portfolio Section -->
         </main>
+    </div>
+
+    <!-- Import Modal -->
+    <div class="import-modal" id="importModal">
+        <div class="import-box">
+            <h2 style="margin-bottom:0.5rem;">📥 Import z Trading 212</h2>
+            <p style="color:var(--text-secondary);margin-bottom:1rem;">Przeciągnij plik CSV lub kliknij aby wybrać</p>
+            <div class="import-dropzone" id="dropzone" onclick="document.getElementById('csvFileInput').click()">
+                <div class="import-dropzone-icon">📄</div>
+                <div>Upuść plik CSV tutaj</div>
+                <div style="color:var(--text-muted);font-size:0.85rem;margin-top:0.5rem;">lub kliknij aby wybrać z dysku
+                </div>
+            </div>
+            <div class="import-result" id="importResult"></div>
+            <div style="display:flex;gap:1rem;justify-content:center;margin-top:1rem;">
+                <button class="chart-tab" onclick="closeImportModal()">Anuluj</button>
+                <button class="btn-analyze" id="confirmImportBtn" style="display:none;" onclick="confirmImport()">✓
+                    Importuj</button>
+            </div>
+        </div>
     </div>
 
     <!-- SENTINEL AI Chat Widget -->
@@ -2038,6 +2508,247 @@
                 eurEl.textContent = currencies.EURPLN.toFixed(4).replace('.', ',');
             }
         }
+
+        // =====================================================
+        // BUY ZONE & CSV IMPORT FUNCTIONALITY
+        // =====================================================
+
+        // TAB NAVIGATION
+        function switchTab(tab) {
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            if (tab === 'portfolio') {
+                document.querySelector('.portfolio-section')?.classList.remove('hidden');
+                document.getElementById('buyzoneSection').classList.remove('active');
+            } else {
+                document.querySelector('.portfolio-section')?.classList.add('hidden');
+                document.getElementById('buyzoneSection').classList.add('active');
+            }
+        }
+
+        // BUY ZONE ANALYSIS
+        let currentAnalysis = null;
+
+        async function analyzeStock() {
+            const ticker = document.getElementById('stockSearchInput').value.trim().toUpperCase();
+            if (!ticker) return;
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loader-spinner"></div>';
+            try {
+                const response = await fetch(API_URL + '?action=buyzone&ticker=' + ticker);
+                const data = await response.json();
+                if (data.error) throw new Error(data.message);
+                currentAnalysis = data;
+                displayAnalysis(data);
+            } catch (err) {
+                console.error('Analysis error:', err);
+                alert('Błąd analizy: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🔍 Analizuj';
+            }
+        }
+
+        function displayAnalysis(data) {
+            document.getElementById('gaugeSection').style.display = 'block';
+            document.getElementById('indicatorsGrid').style.display = 'grid';
+            document.getElementById('analyzedTicker').textContent = data.ticker + ' - ' + (data.name || '');
+            const score = data.buyScore || 50;
+            const scoreEl = document.getElementById('gaugeScore');
+            scoreEl.textContent = score;
+            scoreEl.className = 'gauge-score ' + (score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low');
+            let label = 'Neutralnie';
+            if (score >= 70) label = '🟢 Buy Zone - Okazja!';
+            else if (score >= 50) label = '🟡 Atrakcyjna cena';
+            else if (score >= 30) label = '🟠 Trzymaj / Czekaj';
+            else label = '🔴 Za drogo / Unikaj';
+            document.getElementById('gaugeLabel').textContent = label;
+            document.getElementById('gaugePointer').style.left = score + '%';
+            updateIndicator('rsi', data.rsi, data.rsiScore);
+            updateIndicator('pe', data.pe, data.peScore);
+            updateIndicator('52w', data.position52w, data.positionScore);
+            updateIndicator('sma', data.smaSignal, data.smaScore);
+            updateIndicator('sentiment', data.sentiment, data.sentimentScore);
+        }
+
+        function updateIndicator(id, value, score) {
+            const valEl = document.getElementById('ind-' + id);
+            const statusEl = document.getElementById('ind-' + id + '-status');
+            valEl.textContent = value || '--';
+            valEl.className = 'indicator-value ' + (score >= 60 ? 'bullish' : score >= 40 ? 'neutral' : 'bearish');
+            statusEl.textContent = score >= 60 ? '✓ Pozytywny' : score >= 40 ? '• Neutralny' : '✗ Negatywny';
+        }
+
+        function analyzeFromWatchlist(ticker) {
+            document.getElementById('stockSearchInput').value = ticker;
+            analyzeStock();
+        }
+
+        function addToWatchlist() {
+            if (!currentAnalysis) return;
+            const grid = document.getElementById('watchlistGrid');
+            const ticker = currentAnalysis.ticker;
+            const score = currentAnalysis.buyScore;
+            if (grid.querySelector(`[data-ticker="${ticker}"]`)) return;
+            const scoreClass = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
+            const item = document.createElement('div');
+            item.className = 'watchlist-item';
+            item.setAttribute('data-ticker', ticker);
+            item.onclick = () => analyzeFromWatchlist(ticker);
+            item.innerHTML = `<span class="ticker">${ticker}</span><span class="score ${scoreClass}">${score}</span>`;
+            grid.appendChild(item);
+            saveWatchlist();
+        }
+
+        function saveWatchlist() {
+            const items = [];
+            document.querySelectorAll('.watchlist-item').forEach(el => {
+                items.push({
+                    ticker: el.getAttribute('data-ticker') || el.querySelector('.ticker').textContent,
+                    score: parseInt(el.querySelector('.score').textContent) || 0
+                });
+            });
+            localStorage.setItem('sentinel_watchlist', JSON.stringify(items));
+        }
+
+        function loadWatchlist() {
+            const saved = localStorage.getItem('sentinel_watchlist');
+            if (!saved) return;
+            try {
+                const items = JSON.parse(saved);
+                const grid = document.getElementById('watchlistGrid');
+                grid.innerHTML = '';
+                items.forEach(item => {
+                    const scoreClass = item.score >= 70 ? 'high' : item.score >= 40 ? 'medium' : 'low';
+                    const el = document.createElement('div');
+                    el.className = 'watchlist-item';
+                    el.setAttribute('data-ticker', item.ticker);
+                    el.onclick = () => analyzeFromWatchlist(item.ticker);
+                    el.innerHTML = `<span class="ticker">${item.ticker}</span><span class="score ${scoreClass}">${item.score}</span>`;
+                    grid.appendChild(el);
+                });
+            } catch (e) { }
+        }
+
+        // CSV IMPORT
+        let parsedTransactions = [];
+
+        function openImportModal() {
+            document.getElementById('importModal').classList.add('open');
+            document.getElementById('importResult').style.display = 'none';
+            document.getElementById('confirmImportBtn').style.display = 'none';
+            parsedTransactions = [];
+        }
+
+        function closeImportModal() {
+            document.getElementById('importModal').classList.remove('open');
+        }
+
+        function handleCsvFile(event) {
+            const file = event.target.files[0];
+            if (file) processCsvFile(file);
+        }
+
+        function processCsvFile(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                const text = e.target.result;
+                parsedTransactions = parseTradingCsv(text);
+                const resultEl = document.getElementById('importResult');
+                if (parsedTransactions.length > 0) {
+                    resultEl.className = 'import-result success';
+                    resultEl.innerHTML = `✓ Znaleziono <strong>${parsedTransactions.length}</strong> transakcji`;
+                    resultEl.style.display = 'block';
+                    document.getElementById('confirmImportBtn').style.display = 'block';
+                } else {
+                    resultEl.className = 'import-result error';
+                    resultEl.innerHTML = '✗ Nie znaleziono transakcji';
+                    resultEl.style.display = 'block';
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function parseTradingCsv(text) {
+            const lines = text.split('\n');
+            if (lines.length < 2) return [];
+            const transactions = [];
+            const header = lines[0].split(',');
+            const cols = {
+                action: header.findIndex(h => h.includes('Action')),
+                time: header.findIndex(h => h.includes('Time')),
+                ticker: header.findIndex(h => h.includes('Ticker')),
+                name: header.findIndex(h => h.includes('Name')),
+                shares: header.findIndex(h => h.includes('No. of shares')),
+                price: header.findIndex(h => h.includes('Price')),
+                currency: header.findIndex(h => h.includes('Currency')),
+                total: header.findIndex(h => h.includes('Total'))
+            };
+            for (let i = 1; i < lines.length; i++) {
+                const row = lines[i].split(',');
+                if (row.length < 5) continue;
+                const action = row[cols.action]?.trim();
+                if (action !== 'Market buy' && action !== 'Limit buy') continue;
+                transactions.push({
+                    date: row[cols.time]?.trim(),
+                    ticker: row[cols.ticker]?.trim(),
+                    name: row[cols.name]?.trim(),
+                    shares: parseFloat(row[cols.shares]) || 0,
+                    price: parseFloat(row[cols.price]) || 0,
+                    currency: row[cols.currency]?.trim() || 'USD',
+                    total: parseFloat(row[cols.total]) || 0
+                });
+            }
+            return transactions;
+        }
+
+        async function confirmImport() {
+            if (parsedTransactions.length === 0) return;
+            const btn = document.getElementById('confirmImportBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loader-spinner"></div>';
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                    body: JSON.stringify({ action: 'importCsv', transactions: parsedTransactions })
+                });
+                const data = await response.json();
+                const resultEl = document.getElementById('importResult');
+                if (data.success) {
+                    resultEl.className = 'import-result success';
+                    resultEl.innerHTML = `✓ Zaimportowano ${data.added}, pominięto ${data.skipped} duplikatów`;
+                    btn.style.display = 'none';
+                    setTimeout(() => { closeImportModal(); updateDashboard(); }, 2000);
+                } else {
+                    resultEl.className = 'import-result error';
+                    resultEl.innerHTML = '✗ ' + (data.message || 'Błąd importu');
+                }
+            } catch (err) {
+                document.getElementById('importResult').className = 'import-result error';
+                document.getElementById('importResult').innerHTML = '✗ Błąd: ' + err.message;
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '✓ Importuj';
+            }
+        }
+
+        // Drag & Drop setup + Watchlist load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadWatchlist();
+            const dropzone = document.getElementById('dropzone');
+            if (dropzone) {
+                dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
+                dropzone.addEventListener('dragleave', () => { dropzone.classList.remove('dragover'); });
+                dropzone.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    dropzone.classList.remove('dragover');
+                    const file = e.dataTransfer.files[0];
+                    if (file) processCsvFile(file);
+                });
+            }
+        });
     </script>
 </body>
 
