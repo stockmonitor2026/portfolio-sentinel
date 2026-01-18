@@ -216,9 +216,9 @@ function getCurrencyRates_(ss) {
   if (!sheet) return { USDPLN: 4.05, EURPLN: 4.25 };
   
   try {
-    // USD/PLN w N1, EUR/PLN w N2
-    const usdpln = parseFloat(sheet.getRange('N1').getValue()) || 4.05;
-    const eurpln = parseFloat(sheet.getRange('N2').getValue()) || 4.25;
+    // ZMIANA (18.01.2026): N1=EUR, N2=USD (według zgłoszenia użytkownika)
+    const eurpln = parseFloat(sheet.getRange('N1').getValue()) || 4.25;
+    const usdpln = parseFloat(sheet.getRange('N2').getValue()) || 4.05;
     
     // Walidacja - kurs powinien być między 1 a 10
     if (usdpln < 1 || usdpln > 10) {
