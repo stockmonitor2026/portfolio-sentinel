@@ -1934,13 +1934,30 @@
         }
 
         function updateCharts(data) {
-            // Update Allocation Chart
-            const labels = data.positions.slice(0, 6).map(p => p.ticker);
-            const values = data.positions.slice(0, 6).map(p => p.valuePLN);
+            // 1. Update Allocation Chart
+            if (data.positions) {
+                const labels = data.positions.slice(0, 6).map(p => p.ticker);
+                const values = data.positions.slice(0, 6).map(p => p.valuePLN);
 
-            allocationChart.data.labels = labels;
-            allocationChart.data.datasets[0].data = values;
-            allocationChart.update();
+                allocationChart.data.labels = labels;
+                allocationChart.data.datasets[0].data = values;
+                allocationChart.update();
+            }
+
+            // 2. Update Portfolio Value Chart (Skala)
+            // Ponieważ nie mamy jeszcze historii w API, ustawiamy obecną wartość
+            // żeby wykres miał dobrą skalę (zamiast demo 24k)
+            if (data.summary && data.summary.totalValue) {
+                const currentVal = data.summary.totalValue;
+                // Generuj 7 punktów z obecną wartością (płaska linia na razie)
+                const mockHistory = Array(7).fill(currentVal);
+
+                // Opcjonalnie: lekki "jitter" żeby wykres żył (+/- 1%)
+                // const historyWithNoise = mockHistory.map(v => v * (0.995 + Math.random() * 0.01));
+
+                portfolioChart.data.datasets[0].data = mockHistory;
+                portfolioChart.update();
+            }
         }
 
         function updateCurrencies(currencies) {
