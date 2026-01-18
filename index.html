@@ -1627,7 +1627,12 @@
                 <div class="watchlist-section glass-card">
                     <div class="watchlist-header">
                         <div class="section-title">👀 Watchlista</div>
-                        <button class="chart-tab" onclick="addToWatchlist()">+ Dodaj obecną</button>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button class="chart-tab" onclick="addToWatchlist()">+ Dodaj</button>
+                            <button class="chart-tab" onclick="clearWatchlist()"
+                                style="background: rgba(255,68,102,0.2); border-color: rgba(255,68,102,0.3);">🗑️
+                                Wyczyść</button>
+                        </div>
                     </div>
                     <div class="watchlist-grid" id="watchlistGrid">
                         <div class="watchlist-item" onclick="analyzeFromWatchlist('AAPL')">
@@ -2610,6 +2615,13 @@
                 });
             });
             localStorage.setItem('sentinel_watchlist', JSON.stringify(items));
+        }
+
+        function clearWatchlist() {
+            if (confirm('Usunąć wszystkie pozycje z watchlisty?')) {
+                localStorage.removeItem('sentinel_watchlist');
+                document.getElementById('watchlistGrid').innerHTML = '';
+            }
         }
 
         function loadWatchlist() {
