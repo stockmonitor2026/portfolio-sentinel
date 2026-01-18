@@ -1944,16 +1944,28 @@
                 allocationChart.update();
             }
 
-            // 2. Update Portfolio Value Chart (Skala)
-            // Ponieważ nie mamy jeszcze historii w API, ustawiamy obecną wartość
-            // żeby wykres miał dobrą skalę (zamiast demo 24k)
-            if (data.summary && data.summary.totalValue) {
+            // 2. Update Portfolio Value Chart (History)
+            if (data.history && data.history.length > 0) {
+                // Mamy historię!
+                const historyLabels = data.history.map(h => {
+                    const d = new Date(h.date);
+                    return d.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit' });
+                });
+                const historyValues = data.history.map(h => h.value);
+
+                portfolioChart.data.labels = historyLabels;
+                portfolioChart.data.datasets[0].data = historyValues;
+                // Usuń mock noise jeśli był
+                portfolioChart.update();
+
+            } else if (data.summary && data.summary.totalValue) {
+                // Fallback: Brak historii, użyj 1 punktu (flatline)
                 const currentVal = data.summary.totalValue;
-                // Generuj 7 punktów z obecną wartością (płaska linia na razie)
                 const mockHistory = Array(7).fill(currentVal);
 
-                // Opcjonalnie: lekki "jitter" żeby wykres żył (+/- 1%)
-                // const historyWithNoise = mockHistory.map(v => v * (0.995 + Math.random() * 0.01));
+                // Ustaw etykiety na "Dziś"
+                portfolioChart.data.labels = Array(7).fill('');
+                portfolioChart.data.labels[6] = 'Dziś';
 
                 portfolioChart.data.datasets[0].data = mockHistory;
                 portfolioChart.update();

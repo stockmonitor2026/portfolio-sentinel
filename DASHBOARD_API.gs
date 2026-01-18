@@ -26,6 +26,7 @@ const DASHBOARD_API_CONFIG = {
   // Arkusze
   SHEET_PORTFEL: 'PORTFEL',
   SHEET_NEWSY: 'NEWSY_BAZA',
+  SHEET_HISTORY: 'HISTORIA_WARTOSCI', // Nowy arkusz
   
   // Limity
   MAX_NEWS: 5,
@@ -115,7 +116,8 @@ function getPortfolioData_() {
     positions: getPositions_(ss),
     currencies: getCurrencyRates_(ss),
     news: getLatestNews_(ss),
-    strategy: getStrategyBalance_(ss)
+    strategy: getStrategyBalance_(ss),
+    history: getHistoryData_(ss) // NOWE
   };
 }
 
@@ -375,4 +377,78 @@ function GET_API_URL() {
   console.log('\nWklej ten URL do dashboard/index.html w zmiennej API_URL');
   
   return fullUrl;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// 📜 HISTORIA WARTOŚCI
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Pobiera historię wartości portfela
+ */
+function getHistoryData_(ss) {
+  const sheet = ss.getSheetByName(DASHBOARD_API_CONFIG.SHEET_HISTORY);
+  if (!sheet || sheet.getLastRow() < 2) return [];
+  
+  // Pobierz ostatnie 30 wpisów
+  const lastRow = sheet.getLastRow();
+  const startRow = Math.max(2, lastRow - 29);
+  const numRows = lastRow - startRow + 1;
+  
+  // Jeśli brak danych
+  if (numRows < 1) return [];
+
+  const data = sheet.getRange(startRow, 1, numRows, 3).getValues();
+  
+  // Format: [Data, Wartość, Zysk]
+  return data.map(row => ({
+    date: row[0],
+    value: parseFloat(row[1]) || 0,
+    profit: parseFloat(row[2]) || 0
+  }));
+}
+
+/**
+ * 💾 TRIGGER: Zapisuje codzienną historię
+ * Ustaw trigger czasowy (np. codziennie 23:00) na tę funkcję
+ */
+function saveDailyHistory() {
+  const ss = SpreadsheetApp.getActiveSpreadsheet();
+  let sheet = ss.getSheetByName(DASHBOARD_API_CONFIG.SHEET_HISTORY);
+  
+  // Jeśli brak arkusza - utwórz
+  if (!sheet) {
+    sheet = ss.insertSheet(DASHBOARD_API_CONFIG.SHEET_HISTORY);
+    sheet.getRange(1, 1, 1, 3).setValues([['Data', 'Wartość', 'Zysk Total']]);
+    sheet.getRange(1, 1, 1, 3).setFontWeight('bold').setBackground('#263238').setFontColor('white');
+  }
+  
+  // Pobierz aktualne dane
+  const summary = getPortfolioSummary_(ss);
+  
+  const today = new Date();
+  const value = summary.totalValue || 0;
+  const profit = summary.totalProfit || 0;
+  
+  // Sprawdź czy już jest wpis z dzisiaj (żeby nie dublować)
+  const lastRow = sheet.getLastRow();
+  if (lastRow > 1) {
+    const lastDateVal = sheet.getRange(lastRow, 1).getValue();
+    const lastDate = new Date(lastDateVal);
+    
+    // Porównaj daty (dzień, miesiąc, rok)
+    if (lastDate.getDate() === today.getDate() && 
+        lastDate.getMonth() === today.getMonth() && 
+        lastDate.getFullYear() === today.getFullYear()) {
+      
+      // Aktualizuj dzisiejszy wpis
+      sheet.getRange(lastRow, 2, 1, 2).setValues([[value, profit]]);
+      console.log('Zaktualizowano historię z dzisiaj.');
+      return;
+    }
+  }
+  
+  // Dodaj nowy wpis
+  sheet.appendRow([today, value, profit]);
+  console.log('Dodano nowy wpis do historii.');
 }
