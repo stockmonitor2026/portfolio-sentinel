@@ -2619,12 +2619,20 @@
         async function analyzeStock() {
             const ticker = document.getElementById('stockSearchInput').value.trim().toUpperCase();
             if (!ticker) return;
+
+            // Clear previous UI state
+            resetAnalysisUI();
+
             const btn = document.getElementById('analyzeBtn');
             btn.disabled = true;
             btn.innerHTML = '<div class="loader-spinner"></div>';
+
             try {
-                const response = await fetch(API_URL + '?action=buyzone&ticker=' + ticker);
+                // Add timestamp to avoid caching
+                const timestamp = new Date().getTime();
+                const response = await fetch(`${API_URL}?action=buyzone&ticker=${ticker}&_t=${timestamp}`);
                 const data = await response.json();
+
                 if (data.error) throw new Error(data.message);
                 currentAnalysis = data;
                 displayAnalysis(data);
@@ -2636,6 +2644,29 @@
                 btn.innerHTML = '🔍 Analizuj';
             }
         }
+
+        function resetAnalysisUI() {
+            // Hide sections until we have new data
+            document.getElementById('gaugeSection').style.display = 'none';
+            document.getElementById('chartSection').style.display = 'none';
+            document.getElementById('indicatorsGrid').style.display = 'none';
+
+            // Reset numerical values
+            document.getElementById('ind-rsi').textContent = '--';
+            document.getElementById('ind-pe').textContent = '--';
+            document.getElementById('ind-52w').textContent = '--';
+            document.getElementById('ind-sma').textContent = '--';
+            document.getElementById('ind-sentiment').textContent = '--';
+
+            // Reset status classes
+            document.querySelectorAll('.indicator-value').forEach(el => {
+                el.className = 'indicator-value neutral';
+            });
+            document.querySelectorAll('.indicator-status').forEach(el => {
+                el.textContent = '--';
+            });
+        }
+
 
         function displayAnalysis(data) {
             document.getElementById('gaugeSection').style.display = 'block';
