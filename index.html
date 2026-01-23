@@ -1349,40 +1349,6 @@
             color: var(--neon-red)
         }
 
-        /* Tooltip & Info Styles */
-        .info-container {
-            display: inline-flex;
-            align-items: center;
-            margin-left: 5px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .info-icon {
-            font-size: 0.8rem;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-
-        .info-icon:hover {
-            opacity: 1;
-        }
-
-        .indicator-desc {
-            font-size: 0.75rem;
-            color: var(--text-muted);
-            margin-top: 0.5rem;
-            line-height: 1.3;
-            display: block;
-        }
-
-        .indicator-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-        }
-
         .indicator-value.neutral {
             color: var(--neon-yellow)
         }
@@ -1537,6 +1503,72 @@
                 transform: rotate(360deg);
             }
         }
+
+        /* =====================================================
+           SKELETON LOADERS - Perceived Performance
+           ===================================================== */
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+
+            100% {
+                background-position: -200% 0;
+            }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg,
+                    rgba(255, 255, 255, 0.03) 25%,
+                    rgba(255, 255, 255, 0.08) 50%,
+                    rgba(255, 255, 255, 0.03) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite ease-in-out;
+            border-radius: 8px;
+            color: transparent !important;
+        }
+
+        .skeleton-stat {
+            display: inline-block;
+            height: 2.25rem;
+            width: 70%;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-text {
+            display: inline-block;
+            height: 1rem;
+            width: 50%;
+        }
+
+        .skeleton-table-row td {
+            position: relative;
+        }
+
+        .skeleton-table-row .skeleton-cell {
+            display: block;
+            height: 1rem;
+            width: 80%;
+            margin: 0.25rem 0;
+        }
+
+        .skeleton-news-item {
+            padding: 0.75rem;
+            border-radius: 10px;
+            margin-bottom: 0.5rem;
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .skeleton-news-title {
+            height: 0.75rem;
+            width: 30%;
+            margin-bottom: 0.5rem;
+        }
+
+        .skeleton-news-text {
+            height: 0.85rem;
+            width: 90%;
+        }
     </style>
 </head>
 
@@ -1630,91 +1662,38 @@
                     </div>
                 </div>
 
-                <!-- TradingView Chart -->
-                <div class="tradingview-chart glass-card" id="chartSection"
-                    style="display:none; margin-bottom: 1.5rem;">
-                    <div class="section-title" style="margin-bottom: 1rem;">📈 Wykres techniczny</div>
-                    <div id="tradingviewWidget" style="height: 400px; border-radius: 12px; overflow: hidden;">
-                        <iframe id="tvChart" src="" style="width: 100%; height: 100%; border: none;" allowfullscreen>
-                        </iframe>
-                    </div>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 0.75rem; flex-wrap: wrap;">
-                        <button class="chart-tab" onclick="setChartInterval('D')">1D</button>
-                        <button class="chart-tab active" onclick="setChartInterval('W')">1W</button>
-                        <button class="chart-tab" onclick="setChartInterval('M')">1M</button>
-                        <button class="chart-tab" onclick="setChartInterval('12M')">1Y</button>
-                        <a id="tvFullLink" href="#" target="_blank" class="chart-tab"
-                            style="margin-left: auto; text-decoration: none;">
-                            🔗 Otwórz w TradingView
-                        </a>
-                    </div>
-                </div>
-
                 <div class="indicators-grid" id="indicatorsGrid" style="display:none;">
-
                     <div class="indicator-card">
-                        <div class="indicator-header">
-                            <div class="indicator-name">RSI (14)</div>
-                            <span class="info-icon"
-                                title="Relative Strength Index. < 30 (Wykupienie - Okazja), > 70 (Wyprzedanie - Drogo)">ℹ️</span>
-                        </div>
+                        <div class="indicator-name">RSI (14)</div>
                         <div class="indicator-value neutral" id="ind-rsi">--</div>
                         <div class="indicator-status" id="ind-rsi-status">--</div>
-                        <div class="indicator-desc">Wskaźnik siły trendu. Pokazuje czy akcja jest wyprzedana.</div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-header">
-                            <div class="indicator-name">P/E Ratio</div>
-                            <span class="info-icon"
-                                title="Price to Earnings. < 15 oznacza zazwyczaj dobrą wycenę dla spółek Value.">ℹ️</span>
-                        </div>
+                        <div class="indicator-name">P/E Ratio</div>
                         <div class="indicator-value neutral" id="ind-pe">--</div>
                         <div class="indicator-status" id="ind-pe-status">--</div>
-                        <div class="indicator-desc">Stosunek ceny do zysku. Określa jak rynek wycenia zysk spółki.</div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-header">
-                            <div class="indicator-name">vs 52W Low/High</div>
-                            <span class="info-icon"
-                                title="Pozycja ceny względem minimum i maksimum z ostatnich 52 tygodni.">ℹ️</span>
-                        </div>
+                        <div class="indicator-name">vs 52W Low/High</div>
                         <div class="indicator-value neutral" id="ind-52w">--</div>
                         <div class="indicator-status" id="ind-52w-status">--</div>
-                        <div class="indicator-desc">Gdzie jesteśmy w rocznym zakresie? 0% = roczne dno, 100% = szczyt.
-                        </div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-header">
-                            <div class="indicator-name">SMA 50/200</div>
-                            <span class="info-icon"
-                                title="Średnie kroczące. SMA 50 > 200 (Złoty Krzyż) to sygnał wzrostowy.">ℹ️</span>
-                        </div>
+                        <div class="indicator-name">SMA 50/200</div>
                         <div class="indicator-value neutral" id="ind-sma">--</div>
                         <div class="indicator-status" id="ind-sma-status">--</div>
-                        <div class="indicator-desc">Trend średnio- i długookresowy. Bullish = trend wzrostowy.</div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-header">
-                            <div class="indicator-name">Sentiment</div>
-                            <span class="info-icon"
-                                title="Analiza newsów przez AI (Gemini). Ocenia wydźwięk ostatnich wiadomości.">ℹ️</span>
-                        </div>
+                        <div class="indicator-name">Sentiment</div>
                         <div class="indicator-value neutral" id="ind-sentiment">--</div>
                         <div class="indicator-status" id="ind-sentiment-status">--</div>
-                        <div class="indicator-desc">Nastroje rynkowe na podstawie newsów przeanalizowanych przez AI.
-                        </div>
                     </div>
                 </div>
 
                 <div class="watchlist-section glass-card">
                     <div class="watchlist-header">
                         <div class="section-title">👀 Watchlista</div>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <button class="chart-tab" onclick="addToWatchlist()">+ Dodaj</button>
-                            <button class="chart-tab" onclick="clearWatchlist()"
-                                style="background: rgba(255,68,102,0.2); border-color: rgba(255,68,102,0.3);">🗑️
-                                Wyczyść</button>
-                        </div>
+                        <button class="chart-tab" onclick="addToWatchlist()">+ Dodaj obecną</button>
                     </div>
                     <div class="watchlist-grid" id="watchlistGrid">
                         <div class="watchlist-item" onclick="analyzeFromWatchlist('AAPL')">
@@ -1734,32 +1713,32 @@
                             <span class="stat-icon">💼</span> Wartość Portfolio
                         </div>
                         <div class="stat-value" id="total-value">
-                            <div class="loader-spinner"></div>
+                            <div class="skeleton skeleton-stat"></div>
                         </div>
-                        <div class="stat-change positive">
-                            ↑ +1 892,45 zł (+8,3%)
+                        <div class="stat-change" id="stat-change-0">
+                            <div class="skeleton skeleton-text" style="width:100%;"></div>
                         </div>
                     </div>
                     <div class="stat-card glass-card">
                         <div class="stat-label">
                             <span class="stat-icon">📈</span> Zysk Całkowity
                         </div>
-                        <div class="stat-value positive" id="total-profit">
-                            <div class="loader-spinner"></div>
+                        <div class="stat-value" id="total-profit">
+                            <div class="skeleton skeleton-stat"></div>
                         </div>
-                        <div class="stat-change positive">
-                            ↑ +234,12 zł dziś
+                        <div class="stat-change" id="stat-change-1">
+                            <div class="skeleton skeleton-text" style="width:80%;"></div>
                         </div>
                     </div>
                     <div class="stat-card glass-card">
                         <div class="stat-label">
                             <span class="stat-icon">💱</span> Wpływ FX
                         </div>
-                        <div class="stat-value positive" id="total-fx">
-                            <div class="loader-spinner"></div>
+                        <div class="stat-value" id="total-fx">
+                            <div class="skeleton skeleton-stat"></div>
                         </div>
-                        <div class="stat-change positive">
-                            ↑ PLN osłabiony +2,1%
+                        <div class="stat-change" id="stat-change-2">
+                            <div class="skeleton skeleton-text" style="width:90%;"></div>
                         </div>
                     </div>
                     <div class="stat-card glass-card">
@@ -1767,10 +1746,10 @@
                             <span class="stat-icon">📊</span> Pozycje
                         </div>
                         <div class="stat-value" id="positions-count">
-                            <div class="loader-spinner"></div>
+                            <div class="skeleton skeleton-stat"></div>
                         </div>
-                        <div class="stat-change positive">
-                            5 zyskownych / 3 stratnych
+                        <div class="stat-change" id="stat-change-3">
+                            <div class="skeleton skeleton-text" style="width:85%;"></div>
                         </div>
                     </div>
                 </div>
@@ -1851,8 +1830,17 @@
                     <div class="glass-card">
                         <div class="panel-title">📰 Najnowsze Newsy</div>
                         <div id="news-container">
-                            <div style="text-align: center; padding: 1rem;">
-                                <div class="loader-spinner"></div>
+                            <div class="skeleton-news-item">
+                                <div class="skeleton skeleton-news-title"></div>
+                                <div class="skeleton skeleton-news-text"></div>
+                            </div>
+                            <div class="skeleton-news-item">
+                                <div class="skeleton skeleton-news-title"></div>
+                                <div class="skeleton skeleton-news-text"></div>
+                            </div>
+                            <div class="skeleton-news-item">
+                                <div class="skeleton skeleton-news-title"></div>
+                                <div class="skeleton skeleton-news-text"></div>
                             </div>
                         </div>
                     </div>
@@ -2000,10 +1988,103 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div id="tableLoader" style="text-align: center; padding: 2rem;">
-                            <div class="loader-spinner"></div>
-                            <div style="margin-top: 0.5rem; color: var(--text-secondary); font-size: 0.9rem;">Ładowanie
-                                pozycji...</div>
+                        <div id="tableLoader">
+                            <table class="positions-table">
+                                <tbody>
+                                    <tr class="skeleton-table-row">
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:120px;height:42px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:40px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="skeleton-table-row">
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:120px;height:42px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:40px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="skeleton-table-row">
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:120px;height:42px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:40px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                    </tr>
+                                    <tr class="skeleton-table-row">
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:120px;height:42px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:40px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:90px;"></div>
+                                        </td>
+                                        <td>
+                                            <div class="skeleton skeleton-cell" style="width:70px;"></div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -2078,10 +2159,10 @@
         const portfolioChart = new Chart(portfolioCtx, {
             type: 'line',
             data: {
-                labels: ['Pon', 'Wt', 'Śr', 'Czw', 'Pt', 'Sob', 'Nd'],
+                labels: [],
                 datasets: [{
                     label: 'Wartość',
-                    data: [22500, 22800, 23100, 22900, 23600, 24200, 24683],
+                    data: [],
                     borderColor: '#00d4ff',
                     backgroundColor: gradient,
                     fill: true,
@@ -2151,16 +2232,20 @@
         const allocationChart = new Chart(allocationCtx, {
             type: 'doughnut',
             data: {
-                labels: ['AAPL', 'O', 'VUAA', 'META', 'IONQ', 'SOUN'],
+                labels: [],
                 datasets: [{
-                    data: [35, 17, 15, 12, 8, 5],
+                    data: [],
                     backgroundColor: [
-                        '#1a1a2e',
-                        '#3b82f6',
-                        '#f59e0b',
-                        '#1877f2',
-                        '#6366f1',
-                        '#10b981'
+                        '#00d4ff',  // Cyan
+                        '#f97316',  // Orange
+                        '#22c55e',  // Green
+                        '#a855f7',  // Purple
+                        '#eab308',  // Yellow
+                        '#ec4899',  // Pink
+                        '#06b6d4',  // Teal
+                        '#ef4444',  // Red
+                        '#8b5cf6',  // Violet
+                        '#14b8a6'   // Emerald
                     ],
                     borderWidth: 0,
                     hoverOffset: 8
@@ -2312,6 +2397,46 @@
         const SESSION_KEY = 'sentinel_session';
         const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
+        // =====================================================
+        // CACHE SYSTEM - Instant Load Optimization
+        // =====================================================
+        const CACHE_KEY = 'sentinel_dashboard_cache';
+        const CACHE_TTL = 5 * 60 * 1000; // 5 minut - dane starsze wymuszają refresh
+
+        function getCachedData() {
+            try {
+                const cached = localStorage.getItem(CACHE_KEY);
+                if (!cached) return null;
+                const { data, timestamp } = JSON.parse(cached);
+                return { data, timestamp, age: Date.now() - timestamp };
+            } catch (e) {
+                console.warn('Cache read error:', e);
+                return null;
+            }
+        }
+
+        function saveCacheData(data) {
+            try {
+                localStorage.setItem(CACHE_KEY, JSON.stringify({
+                    data,
+                    timestamp: Date.now()
+                }));
+            } catch (e) {
+                console.warn('Cache write error:', e);
+            }
+        }
+
+        function formatCacheAge(ageMs) {
+            const seconds = Math.floor(ageMs / 1000);
+            if (seconds < 60) return 'przed chwilą';
+            const minutes = Math.floor(seconds / 60);
+            if (minutes === 1) return '1 min temu';
+            if (minutes < 60) return minutes + ' min temu';
+            const hours = Math.floor(minutes / 60);
+            if (hours === 1) return '1 godz. temu';
+            return hours + ' godz. temu';
+        }
+
         function checkPassword() {
             const input = document.getElementById('passwordInput');
             const error = document.getElementById('loginError');
@@ -2381,42 +2506,55 @@
             }
 
             const statusEl = document.getElementById('connectionStatus');
+            const cached = getCachedData();
 
-            // Connecting state
-            statusEl.innerHTML = '<div class="live-dot" style="background: var(--neon-blue); animation: pulse 1s infinite;"></div> Łączenie...';
-            statusEl.style.color = 'var(--neon-blue)';
-            statusEl.style.borderColor = 'rgba(0, 212, 255, 0.2)';
-            statusEl.style.background = 'rgba(0, 212, 255, 0.1)';
+            // ===== PHASE 1: Instant Load from Cache =====
+            if (cached && cached.data) {
+                console.log('📦 Loading from cache (age: ' + formatCacheAge(cached.age) + ')');
 
+                // Show cached data immediately
+                applyDataToUI(cached.data);
+
+                // Show cache status
+                if (cached.age < CACHE_TTL) {
+                    statusEl.innerHTML = '<div class="live-dot" style="background: var(--neon-blue); animation: pulse 1s infinite;"></div> Odświeżam...';
+                    statusEl.style.color = 'var(--neon-blue)';
+                    statusEl.style.borderColor = 'rgba(0, 212, 255, 0.2)';
+                    statusEl.style.background = 'rgba(0, 212, 255, 0.1)';
+                } else {
+                    // Stale cache - still show but indicate age
+                    statusEl.innerHTML = '<div class="live-dot" style="background: #f59e0b;"></div> Dane: ' + formatCacheAge(cached.age);
+                    statusEl.style.color = '#f59e0b';
+                    statusEl.style.borderColor = 'rgba(245, 158, 11, 0.2)';
+                    statusEl.style.background = 'rgba(245, 158, 11, 0.1)';
+                }
+            } else {
+                // No cache - show connecting
+                statusEl.innerHTML = '<div class="live-dot" style="background: var(--neon-blue); animation: pulse 1s infinite;"></div> Łączenie...';
+                statusEl.style.color = 'var(--neon-blue)';
+                statusEl.style.borderColor = 'rgba(0, 212, 255, 0.2)';
+                statusEl.style.background = 'rgba(0, 212, 255, 0.1)';
+            }
+
+            // ===== PHASE 2: Fetch Fresh Data from API =====
             try {
                 const response = await fetch(API_URL);
                 const data = await response.json();
 
                 if (data.error) throw new Error(data.message);
 
-                // Update Status
+                // Save to cache
+                saveCacheData(data);
+                console.log('💾 Data saved to cache');
+
+                // Update Status to LIVE
                 statusEl.innerHTML = '<div class="live-dot"></div> LIVE';
                 statusEl.style.background = 'rgba(0, 255, 136, 0.1)';
                 statusEl.style.color = 'var(--neon-green)';
                 statusEl.style.borderColor = 'rgba(0, 255, 136, 0.2)';
 
-                // Update Summary Stats
-                updateSummary(data.summary, data.positions);
-
-                // Update Positions Table
-                updatePositionsTable(data.positions);
-
-                // Update Strategy
-                updateStrategy(data.strategy);
-
-                // Update News
-                updateNews(data.news);
-
-                // Update Charts
-                updateCharts(data);
-
-                // Update Currency Rates
-                updateCurrencies(data.currencies);
+                // Apply fresh data
+                applyDataToUI(data);
 
                 // Update Time
                 const now = new Date();
@@ -2424,10 +2562,29 @@
 
             } catch (err) {
                 console.error('Fetch error:', err);
-                statusEl.innerHTML = '<div class="live-dot" style="background: var(--neon-red);"></div> ERROR';
-                statusEl.style.background = 'rgba(255, 68, 102, 0.1)';
-                statusEl.style.color = 'var(--neon-red)';
+
+                // If we had cache, keep showing it with error indicator
+                if (cached && cached.data) {
+                    statusEl.innerHTML = '<div class="live-dot" style="background: #f59e0b;"></div> Offline (' + formatCacheAge(cached.age) + ')';
+                    statusEl.style.background = 'rgba(245, 158, 11, 0.1)';
+                    statusEl.style.color = '#f59e0b';
+                    statusEl.style.borderColor = 'rgba(245, 158, 11, 0.2)';
+                } else {
+                    statusEl.innerHTML = '<div class="live-dot" style="background: var(--neon-red);"></div> ERROR';
+                    statusEl.style.background = 'rgba(255, 68, 102, 0.1)';
+                    statusEl.style.color = 'var(--neon-red)';
+                }
             }
+        }
+
+        // Helper function to apply data to UI (used by both cache and fresh data)
+        function applyDataToUI(data) {
+            updateSummary(data.summary, data.positions);
+            updatePositionsTable(data.positions);
+            updateStrategy(data.strategy);
+            updateNews(data.news);
+            updateCharts(data);
+            updateCurrencies(data.currencies);
         }
 
         function updateSummary(summary, positions) {
@@ -2619,20 +2776,12 @@
         async function analyzeStock() {
             const ticker = document.getElementById('stockSearchInput').value.trim().toUpperCase();
             if (!ticker) return;
-
-            // Clear previous UI state
-            resetAnalysisUI();
-
             const btn = document.getElementById('analyzeBtn');
             btn.disabled = true;
             btn.innerHTML = '<div class="loader-spinner"></div>';
-
             try {
-                // Add timestamp to avoid caching
-                const timestamp = new Date().getTime();
-                const response = await fetch(`${API_URL}?action=buyzone&ticker=${ticker}&_t=${timestamp}`);
+                const response = await fetch(API_URL + '?action=buyzone&ticker=' + ticker);
                 const data = await response.json();
-
                 if (data.error) throw new Error(data.message);
                 currentAnalysis = data;
                 displayAnalysis(data);
@@ -2645,40 +2794,10 @@
             }
         }
 
-        function resetAnalysisUI() {
-            // Hide sections until we have new data
-            document.getElementById('gaugeSection').style.display = 'none';
-            document.getElementById('chartSection').style.display = 'none';
-            document.getElementById('indicatorsGrid').style.display = 'none';
-
-            // Reset numerical values
-            document.getElementById('ind-rsi').textContent = '--';
-            document.getElementById('ind-pe').textContent = '--';
-            document.getElementById('ind-52w').textContent = '--';
-            document.getElementById('ind-sma').textContent = '--';
-            document.getElementById('ind-sentiment').textContent = '--';
-
-            // Reset status classes
-            document.querySelectorAll('.indicator-value').forEach(el => {
-                el.className = 'indicator-value neutral';
-            });
-            document.querySelectorAll('.indicator-status').forEach(el => {
-                el.textContent = '--';
-            });
-        }
-
-
         function displayAnalysis(data) {
             document.getElementById('gaugeSection').style.display = 'block';
-            document.getElementById('chartSection').style.display = 'block';
             document.getElementById('indicatorsGrid').style.display = 'grid';
             document.getElementById('analyzedTicker').textContent = data.ticker + ' - ' + (data.name || '');
-
-            // Update TradingView chart
-            currentChartTicker = data.ticker;
-            updateTradingViewChart(data.ticker, currentChartInterval);
-            document.getElementById('tvFullLink').href = 'https://www.tradingview.com/chart/?symbol=' + data.ticker;
-
             const score = data.buyScore || 50;
             const scoreEl = document.getElementById('gaugeScore');
             scoreEl.textContent = score;
@@ -2696,26 +2815,6 @@
             updateIndicator('sma', data.smaSignal, data.smaScore);
             updateIndicator('sentiment', data.sentiment, data.sentimentScore);
         }
-
-        // TradingView Chart Functions
-        let currentChartTicker = 'AAPL';
-        let currentChartInterval = 'W';
-
-        function updateTradingViewChart(ticker, interval) {
-            const iframe = document.getElementById('tvChart');
-            const tvInterval = interval === '12M' ? 'M' : interval;
-            iframe.src = `https://s.tradingview.com/widgetembed/?symbol=${ticker}&interval=${tvInterval}&theme=dark&style=1&locale=en&hide_top_toolbar=1&hide_legend=0&save_image=0&withdateranges=1&hide_side_toolbar=0&allow_symbol_change=0&studies=RSI%40tv-basicstudies&studies=MASimple%4050&studies=MASimple%40200`;
-        }
-
-        function setChartInterval(interval) {
-            currentChartInterval = interval;
-            document.querySelectorAll('#chartSection .chart-tab').forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-            if (currentChartTicker) {
-                updateTradingViewChart(currentChartTicker, interval);
-            }
-        }
-
 
         function updateIndicator(id, value, score) {
             const valEl = document.getElementById('ind-' + id);
@@ -2755,13 +2854,6 @@
                 });
             });
             localStorage.setItem('sentinel_watchlist', JSON.stringify(items));
-        }
-
-        function clearWatchlist() {
-            if (confirm('Usunąć wszystkie pozycje z watchlisty?')) {
-                localStorage.removeItem('sentinel_watchlist');
-                document.getElementById('watchlistGrid').innerHTML = '';
-            }
         }
 
         function loadWatchlist() {
@@ -2809,8 +2901,14 @@
                 parsedTransactions = parseTradingCsv(text);
                 const resultEl = document.getElementById('importResult');
                 if (parsedTransactions.length > 0) {
+                    // Count by type
+                    const buys = parsedTransactions.filter(t => t.Action.toLowerCase() === 'market buy').length;
+                    const sells = parsedTransactions.filter(t => t.Action.toLowerCase() === 'market sell').length;
+                    const divs = parsedTransactions.filter(t => t.Action.toLowerCase().includes('dividend')).length;
+
                     resultEl.className = 'import-result success';
-                    resultEl.innerHTML = `✓ Znaleziono <strong>${parsedTransactions.length}</strong> transakcji`;
+                    resultEl.innerHTML = `✓ Znaleziono <strong>${parsedTransactions.length}</strong> rekordów:<br/>
+                        📈 Zakupy: ${buys} | 📉 Sprzedaże: ${sells} | 💰 Dywidendy: ${divs}`;
                     resultEl.style.display = 'block';
                     document.getElementById('confirmImportBtn').style.display = 'block';
                 } else {
@@ -2823,36 +2921,74 @@
         }
 
         function parseTradingCsv(text) {
-            const lines = text.split('\n');
+            // Smart CSV parsing that handles quoted fields
+            const parseRow = (line) => {
+                const result = [];
+                let current = '';
+                let inQuotes = false;
+                for (let i = 0; i < line.length; i++) {
+                    const c = line[i];
+                    if (c === '"') {
+                        inQuotes = !inQuotes;
+                    } else if (c === ',' && !inQuotes) {
+                        result.push(current.trim());
+                        current = '';
+                    } else {
+                        current += c;
+                    }
+                }
+                result.push(current.trim());
+                return result;
+            };
+
+            const lines = text.split('\n').filter(l => l.trim());
             if (lines.length < 2) return [];
-            const transactions = [];
-            const header = lines[0].split(',');
+
+            const header = parseRow(lines[0]);
             const cols = {
                 action: header.findIndex(h => h.includes('Action')),
                 time: header.findIndex(h => h.includes('Time')),
+                isin: header.findIndex(h => h.includes('ISIN')),
                 ticker: header.findIndex(h => h.includes('Ticker')),
                 name: header.findIndex(h => h.includes('Name')),
+                id: header.findIndex(h => h === 'ID'),
                 shares: header.findIndex(h => h.includes('No. of shares')),
-                price: header.findIndex(h => h.includes('Price')),
-                currency: header.findIndex(h => h.includes('Currency')),
-                total: header.findIndex(h => h.includes('Total'))
+                price: header.findIndex(h => h.includes('Price / share')),
+                currency: header.findIndex(h => h.includes('Currency (Price / share)')),
+                exchangeRate: header.findIndex(h => h.includes('Exchange rate')),
+                result: header.findIndex(h => h === 'Result'),
+                total: header.findIndex(h => h === 'Total'),
+                withholdingTax: header.findIndex(h => h.includes('Withholding tax'))
             };
+
+            const csvData = [];
             for (let i = 1; i < lines.length; i++) {
-                const row = lines[i].split(',');
+                const row = parseRow(lines[i]);
                 if (row.length < 5) continue;
-                const action = row[cols.action]?.trim();
-                if (action !== 'Market buy' && action !== 'Limit buy') continue;
-                transactions.push({
-                    date: row[cols.time]?.trim(),
-                    ticker: row[cols.ticker]?.trim(),
-                    name: row[cols.name]?.trim(),
-                    shares: parseFloat(row[cols.shares]) || 0,
-                    price: parseFloat(row[cols.price]) || 0,
-                    currency: row[cols.currency]?.trim() || 'USD',
-                    total: parseFloat(row[cols.total]) || 0
+
+                const action = row[cols.action]?.trim() || '';
+                const ticker = row[cols.ticker]?.trim() || '';
+
+                // Skip deposits and non-stock transactions
+                if (!ticker || action.toLowerCase() === 'deposit') continue;
+
+                csvData.push({
+                    Action: action,
+                    Time: row[cols.time]?.trim() || '',
+                    ISIN: row[cols.isin]?.trim() || '',
+                    Ticker: ticker,
+                    Name: row[cols.name]?.trim().replace(/^"|"$/g, '') || ticker,
+                    ID: row[cols.id]?.trim() || '',
+                    'No. of shares': row[cols.shares]?.trim() || '0',
+                    'Price / share': row[cols.price]?.trim() || '0',
+                    'Currency (Price / share)': row[cols.currency]?.trim() || 'USD',
+                    'Exchange rate': row[cols.exchangeRate]?.trim() || '1',
+                    Result: row[cols.result]?.trim() || '0',
+                    Total: row[cols.total]?.trim() || '0',
+                    'Withholding tax': row[cols.withholdingTax]?.trim() || '0'
                 });
             }
-            return transactions;
+            return csvData;
         }
 
         async function confirmImport() {
@@ -2860,22 +2996,36 @@
             const btn = document.getElementById('confirmImportBtn');
             btn.disabled = true;
             btn.innerHTML = '<div class="loader-spinner"></div>';
+
+            // Count types for display
+            const buys = parsedTransactions.filter(t => t.Action.toLowerCase() === 'market buy').length;
+            const sells = parsedTransactions.filter(t => t.Action.toLowerCase() === 'market sell').length;
+            const divs = parsedTransactions.filter(t => t.Action.toLowerCase().includes('dividend')).length;
+
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                    body: JSON.stringify({ action: 'importCsv', transactions: parsedTransactions })
+                    body: JSON.stringify({ action: 'importT212Csv', csvData: parsedTransactions })
                 });
                 const data = await response.json();
                 const resultEl = document.getElementById('importResult');
+
                 if (data.success) {
+                    const buysResult = data.buys || {};
+                    const divsResult = data.dividends || {};
+                    const sellsResult = data.sells || {};
+
                     resultEl.className = 'import-result success';
-                    resultEl.innerHTML = `✓ Zaimportowano ${data.added}, pominięto ${data.skipped} duplikatów`;
+                    resultEl.innerHTML = `✓ Import zakończony:<br/>
+                        📈 Kupna: +${buysResult.added || 0} (pominięto ${buysResult.skipped || 0})<br/>
+                        💰 Dywidendy: +${divsResult.added || 0} (pominięto ${divsResult.skipped || 0})<br/>
+                        📉 Sprzedaże: ${sellsResult.added || 0} (zalogowane)`;
                     btn.style.display = 'none';
-                    setTimeout(() => { closeImportModal(); updateDashboard(); }, 2000);
+                    setTimeout(() => { closeImportModal(); updateDashboard(); }, 3000);
                 } else {
                     resultEl.className = 'import-result error';
-                    resultEl.innerHTML = '✗ ' + (data.message || 'Błąd importu');
+                    resultEl.innerHTML = '✗ ' + (data.error || data.message || 'Błąd importu');
                 }
             } catch (err) {
                 document.getElementById('importResult').className = 'import-result error';
