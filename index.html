@@ -3051,6 +3051,291 @@
                 });
             }
         });
+
+        // ═══════════════════════════════════════════════════════════════════════════
+        // 🔄 SENTINEL DASHBOARD v3.1 - Enhanced Features Module
+        // ═══════════════════════════════════════════════════════════════════════════
+        (function () {
+            // Nadpisz updateNews - teraz z linkami
+            window.updateNews = function (news) {
+                const container = document.getElementById('news-container');
+                if (!news || news.length === 0) {
+                    container.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary);font-size:0.9rem;">Brak nowych wiadomości</div>';
+                    return;
+                }
+
+                window.allNews = news;
+                container.innerHTML = '';
+
+                news.slice(0, 5).forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'news-item';
+
+                    if (item.url) {
+                        div.innerHTML = `
+                            <div class="news-ticker">${item.ticker}</div>
+                            <a href="${item.url}" target="_blank" class="news-text" style="color: var(--text-secondary); text-decoration: none;">
+                                ${item.title} 🔗
+                            </a>
+                        `;
+                        div.style.cursor = 'pointer';
+                        div.onclick = (e) => { e.preventDefault(); window.open(item.url, '_blank'); };
+                    } else {
+                        div.innerHTML = `
+                            <div class="news-ticker">${item.ticker}</div>
+                            <div class="news-text">${item.title}</div>
+                        `;
+                    }
+                    container.appendChild(div);
+                });
+            };
+
+            // Nadpisz updateStrategy - zapisuje dane dla modalu
+            window.updateStrategy = function (strategy) {
+                if (!strategy) return;
+                window.strategyData = strategy;
+
+                const corePct = strategy.corePercent.toFixed(0) + '%';
+                document.getElementById('core-strategy-percent').textContent = corePct;
+                document.getElementById('core-strategy-bar').style.width = strategy.corePercent + '%';
+
+                const satPct = strategy.satellitesPercent.toFixed(0) + '%';
+                document.getElementById('satellites-strategy-percent').textContent = satPct;
+                document.getElementById('satellites-strategy-bar').style.width = strategy.satellitesPercent + '%';
+            };
+
+            // Nadpisz updateCurrencies - z trendem
+            window.updateCurrencies = function (currencies) {
+                if (!currencies) return;
+
+                const usdEl = document.getElementById('usdpln-rate');
+                const eurEl = document.getElementById('eurpln-rate');
+
+                if (usdEl && currencies.USDPLN) {
+                    const trend = currencies.USDTrend === 'UP' ? '↑' : currencies.USDTrend === 'DOWN' ? '↓' : '';
+                    const change = currencies.USDChange ? ` (${currencies.USDChange > 0 ? '+' : ''}${currencies.USDChange}%)` : '';
+                    const trendColor = currencies.USDTrend === 'UP' ? 'var(--neon-red)' : currencies.USDTrend === 'DOWN' ? 'var(--neon-green)' : 'var(--text-secondary)';
+
+                    usdEl.innerHTML = `
+                        ${currencies.USDPLN.toFixed(4).replace('.', ',')}
+                        <span style="font-size:0.7em; color:${trendColor}; margin-left:0.25rem;">
+                            ${trend}${change}
+                        </span>
+                    `;
+                }
+
+                if (eurEl && currencies.EURPLN) {
+                    const trend = currencies.EURTrend === 'UP' ? '↑' : currencies.EURTrend === 'DOWN' ? '↓' : '';
+                    const change = currencies.EURChange ? ` (${currencies.EURChange > 0 ? '+' : ''}${currencies.EURChange}%)` : '';
+                    const trendColor = currencies.EURTrend === 'UP' ? 'var(--neon-red)' : currencies.EURTrend === 'DOWN' ? 'var(--neon-green)' : 'var(--text-secondary)';
+
+                    eurEl.innerHTML = `
+                        ${currencies.EURPLN.toFixed(4).replace('.', ',')}
+                        <span style="font-size:0.7em; color:${trendColor}; margin-left:0.25rem;">
+                            ${trend}${change}
+                        </span>
+                    `;
+                }
+            };
+
+            // Nadpisz switchTab - obsługa 3 zakładek
+            window.switchTab = function (tab) {
+                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+                if (event && event.target) event.target.classList.add('active');
+
+                const portfolioSection = document.querySelector('.portfolio-section');
+                const buyzoneSection = document.getElementById('buyzoneSection');
+                const newsSection = document.getElementById('newsSection');
+
+                if (portfolioSection) portfolioSection.classList.add('hidden');
+                if (buyzoneSection) buyzoneSection.classList.remove('active');
+                if (newsSection) newsSection.classList.remove('active');
+
+                if (tab === 'portfolio' && portfolioSection) {
+                    portfolioSection.classList.remove('hidden');
+                } else if (tab === 'buyzone' && buyzoneSection) {
+                    buyzoneSection.classList.add('active');
+                } else if (tab === 'news' && newsSection) {
+                    newsSection.classList.add('active');
+                    renderNewsSection();
+                }
+            };
+
+            // Modal strategii
+            window.showStrategyDetails = function (type) {
+                if (!window.strategyData) {
+                    alert('Dane strategii niedostępne. Odśwież stronę.');
+                    return;
+                }
+
+                const modal = document.getElementById('strategyModal');
+                const content = document.getElementById('strategyModalContent');
+                if (!modal || !content) return;
+
+                const positions = type === 'core' ? window.strategyData.corePositions : window.strategyData.satellitePositions;
+                const title = type === 'core' ? '🏦 Core (ETF, REIT)' : '🚀 Satellites (Akcje)';
+                const totalValue = type === 'core' ? window.strategyData.coreValue : window.strategyData.satellitesValue;
+
+                let html = `
+                    <h3 style="margin-bottom: 1rem; color: var(--neon-blue); font-size: 1.25rem;">${title}</h3>
+                    <div style="margin-bottom: 1rem; color: var(--text-secondary);">
+                        Łączna wartość: <strong style="color: var(--neon-green);">${totalValue.toLocaleString('pl-PL')} zł</strong>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                `;
+
+                if (positions && positions.length > 0) {
+                    positions.forEach(pos => {
+                        const profitColor = pos.profit >= 0 ? 'var(--neon-green)' : 'var(--neon-red)';
+                        const profitSign = pos.profit >= 0 ? '+' : '';
+                        html += `
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.5rem; padding: 0.75rem; background: rgba(255,255,255,0.03); border-radius: 10px; border: 1px solid var(--glass-border);">
+                                <div>
+                                    <div style="font-weight: 700; color: var(--neon-blue);">${pos.ticker}</div>
+                                    <div style="font-size: 0.75rem; color: var(--text-muted);">${pos.type}</div>
+                                </div>
+                                <div style="text-align: right;">${pos.value.toLocaleString('pl-PL')} zł</div>
+                                <div style="text-align: right; color: ${profitColor}; font-weight: 600;">
+                                    ${profitSign}${pos.profit.toLocaleString('pl-PL')} zł
+                                </div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    html += '<div style="text-align:center; color: var(--text-muted); padding: 2rem;">Brak pozycji</div>';
+                }
+
+                html += '</div>';
+                content.innerHTML = html;
+                modal.classList.add('open');
+            };
+
+            window.closeStrategyModal = function () {
+                const modal = document.getElementById('strategyModal');
+                if (modal) modal.classList.remove('open');
+            };
+
+            // Renderowanie sekcji newsów
+            window.renderNewsSection = function () {
+                const container = document.getElementById('newsListContainer');
+                if (!container) return;
+
+                const news = window.allNews || [];
+
+                if (news.length === 0) {
+                    container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-secondary);">Brak newsów do wyświetlenia</div>';
+                    return;
+                }
+
+                const grouped = {};
+                news.forEach(item => {
+                    if (!grouped[item.ticker]) grouped[item.ticker] = [];
+                    grouped[item.ticker].push(item);
+                });
+
+                let html = '';
+
+                Object.keys(grouped).sort().forEach(ticker => {
+                    html += `
+                        <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden;">
+                            <div style="background: rgba(0, 212, 255, 0.1); padding: 0.75rem 1.25rem; font-weight: 700; color: var(--neon-blue); font-size: 1rem; border-bottom: 1px solid var(--glass-border);">
+                                ${ticker}
+                            </div>
+                            <div style="padding: 0.5rem;">
+                    `;
+
+                    grouped[ticker].forEach(item => {
+                        const linkIcon = item.url ? '🔗' : '';
+                        const cursor = item.url ? 'cursor: pointer;' : '';
+                        const onclick = item.url ? `onclick="window.open('${item.url}', '_blank')"` : '';
+
+                        html += `
+                            <div style="display: grid; grid-template-columns: 80px 1fr 30px; gap: 0.75rem; align-items: center; padding: 0.75rem; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 0.5rem; ${cursor} transition: all 0.2s;" ${onclick}
+                                 onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateX(4px)';"
+                                 onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.transform='translateX(0)';">
+                                <div style="color: var(--text-muted); font-size: 0.75rem;">${item.date || ''}</div>
+                                <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4;">${item.title}</div>
+                                <div style="font-size: 1rem; opacity: 0.6;">${linkIcon}</div>
+                            </div>
+                        `;
+                    });
+
+                    html += '</div></div>';
+                });
+
+                container.innerHTML = html;
+            };
+
+            // AUTO-INJECT HTML ELEMENTS
+            document.addEventListener('DOMContentLoaded', function () {
+                // 1. Dodaj zakładkę Newsy
+                const navTabs = document.querySelector('.nav-tabs');
+                if (navTabs && !document.querySelector('[onclick*="news"]')) {
+                    const newsTab = document.createElement('button');
+                    newsTab.className = 'nav-tab';
+                    newsTab.onclick = function () { switchTab('news'); };
+                    newsTab.innerHTML = '📰 Newsy';
+                    navTabs.appendChild(newsTab);
+                }
+
+                // 2. Dodaj sekcję newsów
+                const buyzoneSection = document.getElementById('buyzoneSection');
+                if (buyzoneSection && !document.getElementById('newsSection')) {
+                    const newsSection = document.createElement('div');
+                    newsSection.id = 'newsSection';
+                    newsSection.className = 'buyzone-section';
+                    newsSection.innerHTML = `
+                        <div class="glass-card" style="margin-bottom: 1.5rem;">
+                            <div class="section-header">
+                                <div class="section-title">📰 Wszystkie Newsy</div>
+                                <div style="color: var(--text-secondary); font-size: 0.85rem;">
+                                    Pogrupowane po spółkach • Kliknij aby otworzyć artykuł
+                                </div>
+                            </div>
+                        </div>
+                        <div id="newsListContainer">
+                            <div style="text-align:center; padding:2rem; color:var(--text-secondary);">
+                                Ładowanie newsów...
+                            </div>
+                        </div>
+                    `;
+                    buyzoneSection.after(newsSection);
+                }
+
+                // 3. Dodaj modal strategii
+                if (!document.getElementById('strategyModal')) {
+                    const modal = document.createElement('div');
+                    modal.id = 'strategyModal';
+                    modal.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:10000;display:none;align-items:center;justify-content:center;';
+                    modal.onclick = function (e) { if (e.target === this) closeStrategyModal(); };
+                    modal.innerHTML = `
+                        <div style="background:var(--glass-bg);backdrop-filter:blur(30px);border:1px solid var(--glass-border);border-radius:24px;padding:2rem;max-width:500px;width:90%;max-height:80vh;overflow-y:auto;position:relative;">
+                            <button onclick="closeStrategyModal()" style="position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-secondary);font-size:1.5rem;cursor:pointer;">✕</button>
+                            <div id="strategyModalContent"></div>
+                        </div>
+                    `;
+                    document.body.appendChild(modal);
+
+                    const style = document.createElement('style');
+                    style.textContent = '#strategyModal.open { display: flex !important; }';
+                    document.head.appendChild(style);
+                }
+
+                // 4. Dodaj onclick do strategy bars
+                const strategyBars = document.querySelectorAll('.strategy-bar');
+                if (strategyBars.length >= 2) {
+                    strategyBars[0].style.cursor = 'pointer';
+                    strategyBars[0].onclick = function () { showStrategyDetails('core'); };
+                    strategyBars[0].title = 'Kliknij aby zobaczyć skład Core';
+
+                    strategyBars[1].style.cursor = 'pointer';
+                    strategyBars[1].onclick = function () { showStrategyDetails('satellites'); };
+                    strategyBars[1].title = 'Kliknij aby zobaczyć skład Satellites';
+                }
+
+                console.log('✅ SENTINEL Dashboard v3.1 - Enhanced Features loaded!');
+            });
+        })();
     </script>
 </body>
 
