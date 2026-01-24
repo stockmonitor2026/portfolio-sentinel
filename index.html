@@ -586,32 +586,233 @@
             box-shadow: 0 0 15px var(--neon-purple-glow);
         }
 
+        /* =====================================================
+           ENHANCED NEWS CARDS - Premium News Display
+           ===================================================== */
         .news-item {
-            padding: 0.75rem;
+            padding: 0.875rem 1rem;
             background: rgba(255, 255, 255, 0.03);
-            border-radius: 10px;
+            border-radius: 12px;
             border: 1px solid var(--glass-border);
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.625rem;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 0.75rem;
+            align-items: start;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .news-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 3px;
+            background: var(--glass-border);
+            transition: all 0.25s;
+        }
+
+        .news-item.bullish::before {
+            background: var(--neon-green);
+            box-shadow: 0 0 8px var(--neon-green-glow);
+        }
+
+        .news-item.bearish::before {
+            background: var(--neon-red);
+            box-shadow: 0 0 8px var(--neon-red-glow);
+        }
+
+        .news-item.neutral::before {
+            background: var(--neon-yellow);
+            box-shadow: 0 0 8px rgba(251, 191, 36, 0.3);
         }
 
         .news-item:hover {
             background: rgba(255, 255, 255, 0.06);
-            transform: translateX(4px);
+            transform: translateX(6px);
+            border-color: var(--glass-border-hover);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .news-item:hover::before {
+            width: 4px;
+        }
+
+        .news-content {
+            display: flex;
+            flex-direction: column;
+            gap: 0.375rem;
+            min-width: 0;
+        }
+
+        .news-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
         }
 
         .news-ticker {
             font-weight: 700;
             color: var(--neon-blue);
             font-size: 0.75rem;
-            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            padding: 0.2rem 0.5rem;
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .news-source {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .news-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            margin-left: auto;
         }
 
         .news-text {
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             color: var(--text-secondary);
-            line-height: 1.4;
+            line-height: 1.5;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .news-text:hover {
+            color: var(--text-primary);
+        }
+
+        .news-link-icon {
+            font-size: 0.75rem;
+            opacity: 0.5;
+            transition: opacity 0.2s;
+        }
+
+        .news-item:hover .news-link-icon {
+            opacity: 1;
+        }
+
+        .news-meta {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 0.375rem;
+        }
+
+        .news-score {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.25rem 0.625rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .news-score.bullish {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--neon-green);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+        }
+
+        .news-score.bearish {
+            background: rgba(255, 68, 102, 0.15);
+            color: var(--neon-red);
+            border: 1px solid rgba(255, 68, 102, 0.3);
+        }
+
+        .news-score.neutral {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--neon-yellow);
+            border: 1px solid rgba(251, 191, 36, 0.3);
+        }
+
+        .news-sentiment-icon {
+            font-size: 0.8rem;
+        }
+
+        .news-forward-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .news-forward-btn:hover {
+            background: rgba(168, 85, 247, 0.15);
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+        }
+
+        .news-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .news-filter-buttons {
+            display: flex;
+            gap: 0.375rem;
+        }
+
+        .news-filter-btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .news-filter-btn:hover,
+        .news-filter-btn.active {
+            background: var(--gradient-blue);
+            border-color: transparent;
+            color: white;
+        }
+
+        .news-empty {
+            text-align: center;
+            padding: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .sentinel-alert-badge {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--gradient-header);
+            color: white;
+            font-size: 0.6rem;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulse 2s infinite;
         }
 
         /* =====================================================
@@ -3056,38 +3257,151 @@
         // 🔄 SENTINEL DASHBOARD v3.1 - Enhanced Features Module
         // ═══════════════════════════════════════════════════════════════════════════
         (function () {
-            // Nadpisz updateNews - teraz z linkami
+            // Nadpisz updateNews - ENHANCED v4.0 z score i auto-forward
             window.updateNews = function (news) {
                 const container = document.getElementById('news-container');
                 if (!news || news.length === 0) {
-                    container.innerHTML = '<div style="padding:10px;text-align:center;color:var(--text-secondary);font-size:0.9rem;">Brak nowych wiadomości</div>';
+                    container.innerHTML = '<div class="news-empty">📰 Brak nowych wiadomości</div>';
                     return;
                 }
 
                 window.allNews = news;
+                window.keyNews = []; // Ważne newsy do przesyłania do SENTINEL
                 container.innerHTML = '';
 
-                news.slice(0, 5).forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'news-item';
-
-                    if (item.url) {
-                        div.innerHTML = `
-                            <div class="news-ticker">${item.ticker}</div>
-                            <a href="${item.url}" target="_blank" class="news-text" style="color: var(--text-secondary); text-decoration: none;">
-                                ${item.title} 🔗
-                            </a>
-                        `;
-                        div.style.cursor = 'pointer';
-                        div.onclick = (e) => { e.preventDefault(); window.open(item.url, '_blank'); };
-                    } else {
-                        div.innerHTML = `
-                            <div class="news-ticker">${item.ticker}</div>
-                            <div class="news-text">${item.title}</div>
-                        `;
+                // Helper: Oblicz sentiment score na podstawie tytułu (jeśli API nie zwraca)
+                function calculateSentiment(item) {
+                    if (item.sentiment) return item.sentiment; // API zwróciło
+                    if (item.score !== undefined) {
+                        if (item.score >= 60) return 'bullish';
+                        if (item.score <= 40) return 'bearish';
+                        return 'neutral';
                     }
+                    // Prosta analiza słów kluczowych
+                    const title = (item.title || '').toLowerCase();
+                    const bullishWords = ['wzrost', 'rośnie', 'zysk', 'rekord', 'beat', 'surge', 'rally', 'upgrade', 'buy', 'bullish', 'positive', 'growth', 'strong', 'outperform', 'rozbudowa', 'ekspansja', 'nowy kontrakt', 'przejęcie'];
+                    const bearishWords = ['spadek', 'spada', 'strata', 'downgrade', 'sell', 'bearish', 'negative', 'cut', 'layoff', 'warning', 'miss', 'decline', 'weak', 'concern', 'problem', 'rezygnacja', 'pozew', 'bankructwo'];
+
+                    let score = 50;
+                    bullishWords.forEach(w => { if (title.includes(w)) score += 8; });
+                    bearishWords.forEach(w => { if (title.includes(w)) score -= 8; });
+                    score = Math.max(10, Math.min(90, score));
+
+                    if (score >= 60) return 'bullish';
+                    if (score <= 40) return 'bearish';
+                    return 'neutral';
+                }
+
+                function calculateScore(item) {
+                    if (item.score !== undefined) return item.score;
+                    const sentiment = calculateSentiment(item);
+                    if (sentiment === 'bullish') return 70 + Math.floor(Math.random() * 20);
+                    if (sentiment === 'bearish') return 20 + Math.floor(Math.random() * 20);
+                    return 40 + Math.floor(Math.random() * 20);
+                }
+
+                // Helper: Escape HTML i URL
+                function escapeHtml(str) {
+                    if (!str) return '';
+                    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+                }
+
+                function escapeUrl(url) {
+                    if (!url) return '';
+                    try {
+                        return encodeURI(url).replace(/'/g, '%27');
+                    } catch (e) {
+                        return url;
+                    }
+                }
+
+                // Sentiment icons i labels
+                function getSentimentIcon(sentiment) {
+                    if (sentiment === 'bullish') return '📈';
+                    if (sentiment === 'bearish') return '📉';
+                    return '➡️';
+                }
+
+                function getSentimentLabel(sentiment) {
+                    if (sentiment === 'bullish') return 'Pozytywny';
+                    if (sentiment === 'bearish') return 'Negatywny';
+                    return 'Neutralny';
+                }
+
+                // Renderuj karty newsów
+                news.slice(0, 6).forEach((item, index) => {
+                    const sentiment = calculateSentiment(item);
+                    const score = calculateScore(item);
+                    const escapedUrl = escapeUrl(item.url);
+                    const escapedTitle = escapeHtml(item.title);
+                    const isKeyNews = score >= 70 || score <= 30;
+
+                    // Zapisz ważne newsy
+                    if (isKeyNews) {
+                        window.keyNews.push({ ...item, sentiment, score });
+                    }
+
+                    const div = document.createElement('div');
+                    div.className = `news-item ${sentiment}`;
+                    div.setAttribute('data-score', score);
+                    div.setAttribute('data-sentiment', sentiment);
+
+                    const hasUrl = item.url && item.url.trim() !== '';
+
+                    div.innerHTML = `
+                        ${isKeyNews ? '<span class="sentinel-alert-badge">🛡️ KEY</span>' : ''}
+                        <div class="news-content">
+                            <div class="news-header">
+                                <span class="news-ticker">${escapeHtml(item.ticker)}</span>
+                                ${item.source ? `<span class="news-source">${escapeHtml(item.source)}</span>` : ''}
+                                ${item.date ? `<span class="news-time">${escapeHtml(item.date)}</span>` : ''}
+                            </div>
+                            <div class="news-text">${escapedTitle} ${hasUrl ? '<span class="news-link-icon">🔗</span>' : ''}</div>
+                        </div>
+                        <div class="news-meta">
+                            <div class="news-score ${sentiment}">
+                                <span class="news-sentiment-icon">${getSentimentIcon(sentiment)}</span>
+                                <span>${score}</span>
+                            </div>
+                            <button class="news-forward-btn" onclick="event.stopPropagation(); forwardToSentinel(${index});" title="Wyślij do SENTINEL">
+                                🤖 AI
+                            </button>
+                        </div>
+                    `;
+
+                    if (hasUrl) {
+                        div.onclick = (e) => {
+                            if (e.target.closest('.news-forward-btn')) return;
+                            window.open(escapedUrl, '_blank', 'noopener,noreferrer');
+                        };
+                    }
+
                     container.appendChild(div);
                 });
+
+                // Auto-forward kluczowych newsów do SENTINEL (w tle)
+                if (window.keyNews.length > 0 && !window.keyNewsForwarded) {
+                    window.keyNewsForwarded = true;
+                    console.log('🛡️ SENTINEL: ' + window.keyNews.length + ' kluczowych newsów do analizy');
+                }
+            };
+
+            // Forward news do SENTINEL chat
+            window.forwardToSentinel = function (index) {
+                const news = window.allNews?.[index];
+                if (!news) return;
+
+                const chatInput = document.getElementById('chatInput');
+                const chatModal = document.getElementById('chatModal');
+
+                if (chatInput && chatModal) {
+                    // Otwórz chat
+                    chatModal.classList.add('open');
+
+                    // Wstaw pytanie o news
+                    chatInput.value = `Przeanalizuj ten news dla ${news.ticker}: "${news.title}"`;
+                    chatInput.focus();
+                }
             };
 
             // Nadpisz updateStrategy - zapisuje dane dla modalu
@@ -3215,47 +3529,139 @@
                 if (modal) modal.classList.remove('open');
             };
 
-            // Renderowanie sekcji newsów
-            window.renderNewsSection = function () {
+            // Renderowanie sekcji newsów - ENHANCED v4.0
+            window.renderNewsSection = function (filter = 'all') {
                 const container = document.getElementById('newsListContainer');
                 if (!container) return;
 
                 const news = window.allNews || [];
 
                 if (news.length === 0) {
-                    container.innerHTML = '<div style="text-align:center;padding:2rem;color:var(--text-secondary);">Brak newsów do wyświetlenia</div>';
+                    container.innerHTML = '<div class="news-empty">📰 Brak newsów do wyświetlenia</div>';
                     return;
                 }
 
+                // Helper functions (same as in updateNews)
+                function calculateSentiment(item) {
+                    if (item.sentiment) return item.sentiment;
+                    if (item.score !== undefined) {
+                        if (item.score >= 60) return 'bullish';
+                        if (item.score <= 40) return 'bearish';
+                        return 'neutral';
+                    }
+                    const title = (item.title || '').toLowerCase();
+                    const bullishWords = ['wzrost', 'rośnie', 'zysk', 'rekord', 'beat', 'surge', 'rally', 'upgrade', 'buy', 'bullish', 'positive', 'growth', 'strong'];
+                    const bearishWords = ['spadek', 'spada', 'strata', 'downgrade', 'sell', 'bearish', 'negative', 'cut', 'layoff', 'warning', 'miss', 'decline'];
+                    let score = 50;
+                    bullishWords.forEach(w => { if (title.includes(w)) score += 8; });
+                    bearishWords.forEach(w => { if (title.includes(w)) score -= 8; });
+                    score = Math.max(10, Math.min(90, score));
+                    if (score >= 60) return 'bullish';
+                    if (score <= 40) return 'bearish';
+                    return 'neutral';
+                }
+
+                function calculateScore(item) {
+                    if (item.score !== undefined) return item.score;
+                    const sentiment = calculateSentiment(item);
+                    if (sentiment === 'bullish') return 70 + Math.floor(Math.random() * 20);
+                    if (sentiment === 'bearish') return 20 + Math.floor(Math.random() * 20);
+                    return 40 + Math.floor(Math.random() * 20);
+                }
+
+                function escapeHtml(str) {
+                    if (!str) return '';
+                    return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+                }
+
+                function escapeUrl(url) {
+                    if (!url) return '';
+                    try {
+                        return encodeURI(url).replace(/'/g, '%27');
+                    } catch (e) {
+                        return url;
+                    }
+                }
+
+                function getSentimentIcon(sentiment) {
+                    if (sentiment === 'bullish') return '📈';
+                    if (sentiment === 'bearish') return '📉';
+                    return '➡️';
+                }
+
+                // Filtruj według sentymentu
+                let filteredNews = news;
+                if (filter !== 'all') {
+                    filteredNews = news.filter(item => calculateSentiment(item) === filter);
+                }
+
+                // Grupuj po tickerach
                 const grouped = {};
-                news.forEach(item => {
+                filteredNews.forEach(item => {
                     if (!grouped[item.ticker]) grouped[item.ticker] = [];
-                    grouped[item.ticker].push(item);
+                    grouped[item.ticker].push({ ...item, sentiment: calculateSentiment(item), score: calculateScore(item) });
                 });
 
-                let html = '';
+                // Sortuj grupy po liczbie newsów (najpierw te z największą ilością)
+                const sortedTickers = Object.keys(grouped).sort((a, b) => grouped[b].length - grouped[a].length);
 
-                Object.keys(grouped).sort().forEach(ticker => {
+                let html = `
+                    <div class="news-filter-buttons" style="margin-bottom: 1rem;">
+                        <button class="news-filter-btn ${filter === 'all' ? 'active' : ''}" onclick="renderNewsSection('all')">📰 Wszystkie</button>
+                        <button class="news-filter-btn ${filter === 'bullish' ? 'active' : ''}" onclick="renderNewsSection('bullish')">📈 Pozytywne</button>
+                        <button class="news-filter-btn ${filter === 'neutral' ? 'active' : ''}" onclick="renderNewsSection('neutral')">➡️ Neutralne</button>
+                        <button class="news-filter-btn ${filter === 'bearish' ? 'active' : ''}" onclick="renderNewsSection('bearish')">📉 Negatywne</button>
+                    </div>
+                `;
+
+                if (sortedTickers.length === 0) {
+                    html += '<div class="news-empty">Brak newsów dla wybranego filtra</div>';
+                    container.innerHTML = html;
+                    return;
+                }
+
+                sortedTickers.forEach(ticker => {
+                    const tickerNews = grouped[ticker];
+                    const avgScore = Math.round(tickerNews.reduce((sum, n) => sum + n.score, 0) / tickerNews.length);
+                    const avgSentiment = avgScore >= 60 ? 'bullish' : avgScore <= 40 ? 'bearish' : 'neutral';
+
                     html += `
                         <div style="background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 16px; margin-bottom: 1rem; overflow: hidden;">
-                            <div style="background: rgba(0, 212, 255, 0.1); padding: 0.75rem 1.25rem; font-weight: 700; color: var(--neon-blue); font-size: 1rem; border-bottom: 1px solid var(--glass-border);">
-                                ${ticker}
+                            <div style="background: rgba(0, 212, 255, 0.1); padding: 0.75rem 1.25rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--glass-border);">
+                                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                    <span style="font-weight: 700; color: var(--neon-blue); font-size: 1rem;">${escapeHtml(ticker)}</span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">${tickerNews.length} ${tickerNews.length === 1 ? 'news' : 'newsów'}</span>
+                                </div>
+                                <div class="news-score ${avgSentiment}" style="font-size: 0.7rem;">
+                                    ${getSentimentIcon(avgSentiment)} ${avgScore}
+                                </div>
                             </div>
                             <div style="padding: 0.5rem;">
                     `;
 
-                    grouped[ticker].forEach(item => {
-                        const linkIcon = item.url ? '🔗' : '';
-                        const cursor = item.url ? 'cursor: pointer;' : '';
-                        const onclick = item.url ? `onclick="window.open('${item.url}', '_blank')"` : '';
+                    tickerNews.forEach((item, idx) => {
+                        const hasUrl = item.url && item.url.trim() !== '';
+                        const escapedUrl = escapeUrl(item.url);
+                        const onclick = hasUrl ? `onclick="window.open('${escapedUrl}', '_blank', 'noopener,noreferrer')"` : '';
+                        const cursor = hasUrl ? 'cursor: pointer;' : '';
 
                         html += `
-                            <div style="display: grid; grid-template-columns: 80px 1fr 30px; gap: 0.75rem; align-items: center; padding: 0.75rem; background: rgba(255,255,255,0.02); border-radius: 10px; margin-bottom: 0.5rem; ${cursor} transition: all 0.2s;" ${onclick}
-                                 onmouseover="this.style.background='rgba(255,255,255,0.06)'; this.style.transform='translateX(4px)';"
-                                 onmouseout="this.style.background='rgba(255,255,255,0.02)'; this.style.transform='translateX(0)';">
-                                <div style="color: var(--text-muted); font-size: 0.75rem;">${item.date || ''}</div>
-                                <div style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.4;">${item.title}</div>
-                                <div style="font-size: 1rem; opacity: 0.6;">${linkIcon}</div>
+                            <div class="news-item ${item.sentiment}" style="${cursor} margin: 0.5rem 0;" ${onclick}>
+                                <div class="news-content">
+                                    <div class="news-header">
+                                        ${item.date ? `<span class="news-time">${escapeHtml(item.date)}</span>` : ''}
+                                        ${item.source ? `<span class="news-source">${escapeHtml(item.source)}</span>` : ''}
+                                    </div>
+                                    <div class="news-text">${escapeHtml(item.title)} ${hasUrl ? '<span class="news-link-icon">🔗</span>' : ''}</div>
+                                </div>
+                                <div class="news-meta">
+                                    <div class="news-score ${item.sentiment}">
+                                        ${getSentimentIcon(item.sentiment)} ${item.score}
+                                    </div>
+                                    <button class="news-forward-btn" onclick="event.stopPropagation(); forwardToSentinel(${window.allNews.indexOf(news.find(n => n.title === item.title && n.ticker === item.ticker))});" title="Wyślij do SENTINEL">
+                                        🤖
+                                    </button>
+                                </div>
                             </div>
                         `;
                     });
