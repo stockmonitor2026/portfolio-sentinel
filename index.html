@@ -3192,16 +3192,11 @@
             return csvData;
         }
 
-        async function confirmImport() {
+          async function confirmImport() {
             if (parsedTransactions.length === 0) return;
             const btn = document.getElementById('confirmImportBtn');
             btn.disabled = true;
             btn.innerHTML = '<div class="loader-spinner"></div>';
-
-            // Count types for display
-            const buys = parsedTransactions.filter(t => t.Action.toLowerCase() === 'market buy').length;
-            const sells = parsedTransactions.filter(t => t.Action.toLowerCase() === 'market sell').length;
-            const divs = parsedTransactions.filter(t => t.Action.toLowerCase().includes('dividend')).length;
 
             try {
                 const response = await fetch(API_URL, {
@@ -3226,7 +3221,8 @@
                     setTimeout(() => { closeImportModal(); updateDashboard(); }, 3000);
                 } else {
                     resultEl.className = 'import-result error';
-                    resultEl.innerHTML = '✗ ' + (data.error || data.message || 'Błąd importu');
+                    // POPRAWKA: Ignorujemy 'true' z data.error, szukamy data.message
+                    resultEl.innerHTML = '✗ ' + (data.message || 'Wystąpił nieznany błąd importu');
                 }
             } catch (err) {
                 document.getElementById('importResult').className = 'import-result error';
