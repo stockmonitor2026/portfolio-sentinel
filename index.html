@@ -7,6 +7,7 @@
     <title>SENTINEL | Portfolio Dashboard</title>
     <meta name="description" content="Premium Portfolio Dashboard with AI-powered insights">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
     <style>
@@ -1847,6 +1848,12 @@
                     <button class="btn-analyze" id="analyzeBtn" onclick="analyzeStock()">🔍 Analizuj</button>
                 </div>
 
+                <!-- TradingView Chart -->
+                <div class="glass-card" id="chartSection" style="display:none; margin-bottom:1.5rem;">
+                    <h3 style="margin-bottom:1rem;">📈 Wykres <span id="chartTicker"></span></h3>
+                    <div id="tradingview_chart" style="height:400px;"></div>
+                </div>
+
                 <div class="buyzone-gauge glass-card" id="gaugeSection" style="display:none;">
                     <h2 id="analyzedTicker" style="margin-bottom:1rem;">AAPL</h2>
                     <div class="gauge-score high" id="gaugeScore">--</div>
@@ -1865,29 +1872,34 @@
 
                 <div class="indicators-grid" id="indicatorsGrid" style="display:none;">
                     <div class="indicator-card">
-                        <div class="indicator-name">RSI (14)</div>
+                        <div class="indicator-name">📊 RSI (14)</div>
                         <div class="indicator-value neutral" id="ind-rsi">--</div>
                         <div class="indicator-status" id="ind-rsi-status">--</div>
+                        <div class="indicator-desc" id="ind-rsi-desc" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;"></div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-name">P/E Ratio</div>
+                        <div class="indicator-name">💰 P/E Ratio</div>
                         <div class="indicator-value neutral" id="ind-pe">--</div>
                         <div class="indicator-status" id="ind-pe-status">--</div>
+                        <div class="indicator-desc" id="ind-pe-desc" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;"></div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-name">vs 52W Low/High</div>
+                        <div class="indicator-name">📍 vs 52W Low/High</div>
                         <div class="indicator-value neutral" id="ind-52w">--</div>
                         <div class="indicator-status" id="ind-52w-status">--</div>
+                        <div class="indicator-desc" id="ind-52w-desc" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;"></div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-name">SMA 50/200</div>
+                        <div class="indicator-name">📈 SMA 50/200</div>
                         <div class="indicator-value neutral" id="ind-sma">--</div>
                         <div class="indicator-status" id="ind-sma-status">--</div>
+                        <div class="indicator-desc" id="ind-sma-desc" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;"></div>
                     </div>
                     <div class="indicator-card">
-                        <div class="indicator-name">Sentiment</div>
+                        <div class="indicator-name">🧠 Sentiment</div>
                         <div class="indicator-value neutral" id="ind-sentiment">--</div>
                         <div class="indicator-status" id="ind-sentiment-status">--</div>
+                        <div class="indicator-desc" id="ind-sentiment-desc" style="font-size:0.75rem;color:var(--text-muted);margin-top:0.5rem;"></div>
                     </div>
                 </div>
 
@@ -3231,6 +3243,185 @@
                 btn.disabled = false;
                 btn.innerHTML = '✓ Importuj';
             }
+        }
+
+        // =====================================================
+        // BUY ZONE ANALYSIS FUNCTIONS
+        // =====================================================
+        let currentTicker = '';
+        let tvWidget = null;
+
+        // Smart description generators
+        function getRsiDescription(rsi) {
+            if (!rsi || isNaN(rsi)) return '';
+            if (rsi < 30) return '🟢 <strong>Wyprzedane!</strong> RSI poniżej 30 sugeruje, że akcja może być niedowartościowana. Historycznie dobry moment na zakup.';
+            if (rsi < 40) return '🟡 RSI w strefie niskiej – akcja zaczyna być atrakcyjna cenowo.';
+            if (rsi < 60) return '⚪ RSI w normie – brak wyraźnego sygnału kupna/sprzedaży.';
+            if (rsi < 70) return '🟡 RSI podwyższone – rozważ poczekanie na lepszą cenę.';
+            return '🔴 <strong>Wykupione!</strong> RSI powyżej 70 – ryzyko korekty. Unikaj kupowania teraz.';
+        }
+
+        function getPeDescription(pe) {
+            if (!pe || isNaN(pe) || pe < 0) return '⚠️ P/E niedostępne lub ujemne (spółka może mieć straty).';
+            if (pe < 10) return '🟢 <strong>Bardzo niska wycena!</strong> P/E poniżej 10 – może być okazja lub spółka ma problemy.';
+            if (pe < 15) return '🟢 <strong>Niska wycena</strong> – typowe dla value stocks. Może być dobra okazja.';
+            if (pe < 25) return '⚪ Wycena w normie dla rynku. Ani tanio, ani drogo.';
+            if (pe < 40) return '🟡 Wyższa wycena – rynek oczekuje wzrostu. Typowe dla growth stocks.';
+            return '🔴 <strong>Bardzo wysoka wycena!</strong> P/E powyżej 40 – duże oczekiwania wbudowane w cenę.';
+        }
+
+        function get52wDescription(position) {
+            if (!position || isNaN(position)) return '';
+            if (position < 15) return '🟢 <strong>Blisko rocznego dna!</strong> Historycznie dobry moment na zakup dla długoterminowych inwestorów.';
+            if (position < 35) return '🟢 Cena w dolnej części rocznego zakresu – potencjalnie atrakcyjna.';
+            if (position < 65) return '⚪ Cena w środku rocznego zakresu – neutralna pozycja.';
+            if (position < 85) return '🟡 Cena w górnej części zakresu – rozważ poczekanie na korektę.';
+            return '🔴 <strong>Blisko rocznego szczytu!</strong> Ryzyko korekty jest wyższe.';
+        }
+
+        function getSmaDescription(signal) {
+            if (!signal) return '';
+            if (signal === 'BULLISH') return '🟢 <strong>Golden Cross!</strong> SMA50 powyżej SMA200 – silny sygnał byczy, trend wzrostowy.';
+            if (signal === 'BEARISH') return '🔴 <strong>Death Cross!</strong> SMA50 poniżej SMA200 – trend spadkowy, ostrożność wskazana.';
+            return '⚪ Średnie kroczące bez wyraźnego sygnału.';
+        }
+
+        function getSentimentDescription(sentiment) {
+            if (!sentiment) return '';
+            const s = sentiment.toUpperCase();
+            if (s === 'POSITIVE' || s === 'BULLISH') return '🟢 <strong>Pozytywny nastrój!</strong> Media i analitycy optymistycznie o spółce.';
+            if (s === 'NEGATIVE' || s === 'BEARISH') return '🔴 <strong>Negatywny nastrój!</strong> Pesymizm w mediach – może być okazja lub realne problemy.';
+            return '⚪ Neutralny nastrój w mediach – brak wyraźnych sygnałów.';
+        }
+
+        async function analyzeStock() {
+            const ticker = document.getElementById('stockSearchInput').value.trim().toUpperCase();
+            if (!ticker) return;
+            currentTicker = ticker;
+
+            const btn = document.getElementById('analyzeBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<div class="loader-spinner"></div>';
+
+            try {
+                const response = await fetch(`${API_URL}?action=buyzone&ticker=${ticker}&_t=${Date.now()}`);
+                const data = await response.json();
+
+                if (data.error) throw new Error(data.message || 'Błąd analizy');
+
+                displayBuyZoneAnalysis(data);
+                loadTradingViewChart(ticker);
+
+            } catch (err) {
+                console.error('Analysis error:', err);
+                alert('Błąd analizy: ' + err.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = '🔍 Analizuj';
+            }
+        }
+
+        function displayBuyZoneAnalysis(data) {
+            document.getElementById('gaugeSection').style.display = 'block';
+            document.getElementById('indicatorsGrid').style.display = 'grid';
+            document.getElementById('chartSection').style.display = 'block';
+
+            document.getElementById('analyzedTicker').textContent = data.ticker || currentTicker;
+            document.getElementById('chartTicker').textContent = data.ticker || currentTicker;
+
+            const score = data.buyScore || 50;
+            const scoreEl = document.getElementById('gaugeScore');
+            scoreEl.textContent = score;
+            scoreEl.className = 'gauge-score ' + (score >= 60 ? 'high' : score >= 40 ? 'medium' : 'low');
+
+            document.getElementById('gaugePointer').style.left = score + '%';
+
+            const label = score >= 70 ? '🟢 STREFA KUPNA - Doskonała okazja!' :
+                          score >= 55 ? '🟡 DOBRA OKAZJA - Rozważ zakup' :
+                          score >= 40 ? '⚪ NEUTRALNIE - Obserwuj' :
+                          '🔴 DROGO - Poczekaj na lepszą cenę';
+            document.getElementById('gaugeLabel').textContent = label;
+
+            // Update indicators with smart descriptions
+            updateIndicator('rsi', data.rsi, data.rsiScore, getRsiDescription(data.rsi));
+            updateIndicator('pe', data.pe, data.peScore, getPeDescription(data.pe));
+            updateIndicator('52w', data.position52W, data.positionScore, get52wDescription(data.position52W));
+            updateIndicator('sma', data.smaSignal, data.smaScore, getSmaDescription(data.smaSignal));
+            updateIndicator('sentiment', data.sentiment, data.sentimentScore, getSentimentDescription(data.sentiment));
+        }
+
+        function updateIndicator(id, value, score, description) {
+            const valEl = document.getElementById('ind-' + id);
+            const statusEl = document.getElementById('ind-' + id + '-status');
+            const descEl = document.getElementById('ind-' + id + '-desc');
+
+            if (valEl) valEl.textContent = value !== undefined && value !== null ? (typeof value === 'number' ? value.toFixed(2) : value) : 'N/A';
+
+            const sentiment = score >= 60 ? 'bullish' : score >= 40 ? 'neutral' : 'bearish';
+
+            if (valEl) valEl.className = 'indicator-value ' + sentiment;
+            if (statusEl) statusEl.textContent = sentiment === 'bullish' ? '✓ Pozytywny' : sentiment === 'bearish' ? '✗ Negatywny' : '• Neutralny';
+            if (descEl) descEl.innerHTML = description || '';
+        }
+
+        function loadTradingViewChart(ticker) {
+            const container = document.getElementById('tradingview_chart');
+            if (!container) return;
+            container.innerHTML = '';
+
+            try {
+                tvWidget = new TradingView.widget({
+                    "autosize": true,
+                    "symbol": ticker,
+                    "interval": "D",
+                    "timezone": "Europe/Warsaw",
+                    "theme": "dark",
+                    "style": "1",
+                    "locale": "pl",
+                    "toolbar_bg": "#1a1a2e",
+                    "enable_publishing": false,
+                    "hide_top_toolbar": false,
+                    "hide_legend": false,
+                    "save_image": false,
+                    "container_id": "tradingview_chart",
+                    "studies": [
+                        "RSI@tv-basicstudies",
+                        "MASimple@tv-basicstudies"
+                    ]
+                });
+            } catch (e) {
+                console.error('TradingView error:', e);
+                container.innerHTML = '<div style="padding:2rem;text-align:center;color:var(--text-muted);">Nie można załadować wykresu</div>';
+            }
+        }
+
+        function analyzeFromWatchlist(ticker) {
+            document.getElementById('stockSearchInput').value = ticker;
+            analyzeStock();
+        }
+
+        function addToWatchlist() {
+            if (!currentTicker) return;
+            let watchlist = JSON.parse(localStorage.getItem('buyzone_watchlist') || '[]');
+            if (!watchlist.includes(currentTicker)) {
+                watchlist.push(currentTicker);
+                localStorage.setItem('buyzone_watchlist', JSON.stringify(watchlist));
+                loadWatchlist();
+            }
+        }
+
+        function loadWatchlist() {
+            const grid = document.getElementById('watchlistGrid');
+            if (!grid) return;
+
+            let watchlist = JSON.parse(localStorage.getItem('buyzone_watchlist') || '["MSFT", "NVDA"]');
+
+            grid.innerHTML = watchlist.map(ticker => `
+                <div class="watchlist-item" onclick="analyzeFromWatchlist('${ticker}')">
+                    <span class="ticker">${ticker}</span>
+                    <span class="score">--</span>
+                </div>
+            `).join('');
         }
 
         // Drag & Drop setup + Watchlist load
