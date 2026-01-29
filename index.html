@@ -1848,12 +1848,6 @@
                     <button class="btn-analyze" id="analyzeBtn" onclick="analyzeStock()">🔍 Analizuj</button>
                 </div>
 
-                <!-- TradingView Chart -->
-                <div class="glass-card" id="chartSection" style="display:none; margin-bottom:1.5rem;">
-                    <h3 style="margin-bottom:1rem;">📈 Wykres <span id="chartTicker"></span></h3>
-                    <div id="tradingview_chart" style="height:400px;"></div>
-                </div>
-
                 <div class="buyzone-gauge glass-card" id="gaugeSection" style="display:none;">
                     <h2 id="analyzedTicker" style="margin-bottom:1rem;">AAPL</h2>
                     <div class="gauge-score high" id="gaugeScore">--</div>
@@ -1868,6 +1862,12 @@
                             <span>🟢 Okazja</span>
                         </div>
                     </div>
+                </div>
+
+                <!-- TradingView Chart -->
+                <div class="glass-card" id="chartSection" style="display:none; margin-bottom:1.5rem;">
+                    <h3 style="margin-bottom:1rem;">📈 Wykres <span id="chartTicker"></span></h3>
+                    <div id="tradingview_chart" style="height:400px;"></div>
                 </div>
 
                 <div class="indicators-grid" id="indicatorsGrid" style="display:none;">
