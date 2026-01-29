@@ -3421,7 +3421,7 @@
             const grid = document.getElementById('watchlistGrid');
             if (!grid) return;
 
-            let watchlist = JSON.parse(localStorage.getItem('buyzone_watchlist') || '["MSFT", "NVDA"]');
+       let watchlist = JSON.parse(localStorage.getItem('buyzone_watchlist') || '[]');
 
             grid.innerHTML = watchlist.map(ticker => `
                 <div class="watchlist-item" onclick="analyzeFromWatchlist('${ticker}')">
