@@ -3343,9 +3343,9 @@
             document.getElementById('gaugeLabel').textContent = label;
 
             // Update indicators with smart descriptions
-            updateIndicator('rsi', data.rsi, data.rsiScore, getRsiDescription(data.rsi));
-            updateIndicator('pe', data.pe, data.peScore, getPeDescription(data.pe));
-            updateIndicator('52w', data.position52W, data.positionScore, get52wDescription(data.position52W));
+            updateIndicator('rsi', data.rsi, data.rsiScore, getRsiDescription(parseFloat(data.rsi)));
+            updateIndicator('pe', data.pe, data.peScore, getPeDescription(parseFloat(data.pe)));
+            updateIndicator('52w', data.position52w, data.positionScore, get52wDescription(parseFloat(data.position52w)));
             updateIndicator('sma', data.smaSignal, data.smaScore, getSmaDescription(data.smaSignal));
             updateIndicator('sentiment', data.sentiment, data.sentimentScore, getSentimentDescription(data.sentiment));
         }
@@ -3355,7 +3355,12 @@
             const statusEl = document.getElementById('ind-' + id + '-status');
             const descEl = document.getElementById('ind-' + id + '-desc');
 
-            if (valEl) valEl.textContent = value !== undefined && value !== null ? (typeof value === 'number' ? value.toFixed(2) : value) : 'N/A';
+            // Handle value display - API returns strings like "45.3" or "N/A" or "32%"
+            let displayValue = 'N/A';
+            if (value !== undefined && value !== null && value !== 'N/A' && value !== '--') {
+                displayValue = value;
+            }
+            if (valEl) valEl.textContent = displayValue;
 
             const sentiment = score >= 60 ? 'bullish' : score >= 40 ? 'neutral' : 'bearish';
 
