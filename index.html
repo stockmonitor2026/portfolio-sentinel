@@ -3262,12 +3262,14 @@
         }
 
         function getPeDescription(pe) {
-            if (!pe || isNaN(pe) || pe < 0) return '⚠️ P/E niedostępne lub ujemne (spółka może mieć straty).';
-            if (pe < 10) return '🟢 <strong>Bardzo niska wycena!</strong> P/E poniżej 10 – może być okazja lub spółka ma problemy.';
-            if (pe < 15) return '🟢 <strong>Niska wycena</strong> – typowe dla value stocks. Może być dobra okazja.';
-            if (pe < 25) return '⚪ Wycena w normie dla rynku. Ani tanio, ani drogo.';
-            if (pe < 40) return '🟡 Wyższa wycena – rynek oczekuje wzrostu. Typowe dla growth stocks.';
-            return '🔴 <strong>Bardzo wysoka wycena!</strong> P/E powyżej 40 – duże oczekiwania wbudowane w cenę.';
+            if (!pe || isNaN(pe) || pe <= 0 || pe === 'N/A') {
+                return '⚠️ P/E niedostępne dla tej spółki.';
+            }
+            if (pe < 10) return '🟢 <strong>Bardzo niska wycena!</strong> P/E poniżej 10.';
+            if (pe < 15) return '🟢 <strong>Niska wycena</strong> – typowe dla value stocks.';
+            if (pe < 25) return '⚪ Wycena w normie dla rynku.';
+            if (pe < 40) return '🟡 Wyższa wycena – typowe dla growth stocks.';
+            return '🔴 <strong>Bardzo wysoka wycena!</strong> P/E powyżej 40.';
         }
 
         function get52wDescription(position) {
