@@ -1,4 +1,17 @@
 /**
+ * ⚠️ DEPRECATED ⚠️
+ * Ten plik jest przestarzały i został zastąpiony przez system modułowy:
+ * - CenyGlowne.gs
+ * - Waluty.gs
+ * - Konfiguracja.gs
+ * - SmartTicker.gs
+ *
+ * Kod został zakomentowany, aby uniknąć konfliktów nazw funkcji.
+ * Nie usuwaj tego pliku, dopóki nie upewnisz się, że wszystko działa w modułach.
+ */
+
+/*
+/**
  * ═══════════════════════════════════════════════════════════════
  * 💼 PORTFEL.gs - Kompletny System Portfela Inwestycyjnego
  * ═══════════════════════════════════════════════════════════════
@@ -608,3 +621,4 @@ function GENERUJ_ID() {
   const random = Math.floor(Math.random() * 1000);
   return `PF-${timestamp}-${random}`;
 }
+*/

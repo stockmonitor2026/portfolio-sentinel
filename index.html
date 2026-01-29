@@ -1784,11 +1784,11 @@
         <div class="login-box">
             <div class="login-logo">🛡️</div>
             <div class="login-title">SENTINEL</div>
-            <div class="login-subtitle">Wprowadź hasło dostępu</div>
-            <input type="password" class="login-input" id="passwordInput" placeholder="Hasło..."
+            <div class="login-subtitle">Wprowadź API Key</div>
+            <input type="password" class="login-input" id="passwordInput" placeholder="API Key..."
                 onkeypress="if(event.key==='Enter')checkPassword()">
             <button class="login-button" onclick="checkPassword()">Zaloguj się</button>
-            <div class="login-error" id="loginError">❌ Nieprawidłowe hasło</div>
+            <div class="login-error" id="loginError">❌ Błąd logowania</div>
         </div>
     </div>
 
@@ -2521,7 +2521,7 @@
             try {
                 // Call AI API
                 // Używamy text/plain żeby uniknąć CORS preflight (OPTIONS), który nie jest obsługiwany przez GAS
-                const response = await fetch(API_URL, {
+                const response = await fetch(API_URL + '?key=' + getSessionApiKey(), {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ question: message })
@@ -2594,7 +2594,6 @@
         // CONFIGURATION & API
         // =====================================================
       const API_URL = 'https://script.google.com/macros/s/AKfycbzxhzjXxwBeR1p5pK7PZd_X-NUY1UY-jKIGVkhLwPzC7gTNhERx1hIaiwFcEDMMi6mQ/exec';
-        const SENTINEL_PASSWORD = 'Snt1n3L_2026!';
         const SESSION_KEY = 'sentinel_session';
         const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
@@ -2638,13 +2637,22 @@
             return hours + ' godz. temu';
         }
 
+        function getSessionApiKey() {
+            try {
+                const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+                return session ? session.apiKey : '';
+            } catch (e) { return ''; }
+        }
+
         function checkPassword() {
             const input = document.getElementById('passwordInput');
             const error = document.getElementById('loginError');
+            const key = input.value.trim();
 
-            if (input.value === SENTINEL_PASSWORD) {
-                // Save session
+            if (key.length > 0) {
+                // Save session with API Key
                 const session = {
+                    apiKey: key,
                     authenticated: true,
                     expires: Date.now() + SESSION_DURATION
                 };
@@ -2653,9 +2661,12 @@
                 // Hide login
                 document.getElementById('loginOverlay').classList.add('hidden');
                 error.classList.remove('show');
+
+                // Refresh data
+                updateDashboard();
             } else {
+                error.textContent = "Wprowadź klucz API";
                 error.classList.add('show');
-                input.value = '';
                 input.focus();
             }
         }
@@ -2666,7 +2677,7 @@
             if (sessionData) {
                 try {
                     const session = JSON.parse(sessionData);
-                    if (session.authenticated && session.expires > Date.now()) {
+                    if (session.authenticated && session.expires > Date.now() && session.apiKey) {
                         // Valid session - hide login
                         document.getElementById('loginOverlay').classList.add('hidden');
                         return true;
@@ -2739,7 +2750,7 @@
 
             // ===== PHASE 2: Fetch Fresh Data from API =====
             try {
-                const response = await fetch(API_URL);
+                const response = await fetch(API_URL + '?key=' + getSessionApiKey());
                 const data = await response.json();
 
                 if (data.error) throw new Error(data.message);
@@ -2981,7 +2992,7 @@
             btn.disabled = true;
             btn.innerHTML = '<div class="loader-spinner"></div>';
             try {
-                const response = await fetch(API_URL + '?action=buyzone&ticker=' + ticker);
+                const response = await fetch(API_URL + '?key=' + getSessionApiKey() + '&action=buyzone&ticker=' + ticker);
                 const data = await response.json();
                 if (data.error) throw new Error(data.message);
                 currentAnalysis = data;
@@ -3199,7 +3210,7 @@
             btn.innerHTML = '<div class="loader-spinner"></div>';
 
             try {
-                const response = await fetch(API_URL, {
+                const response = await fetch(API_URL + '?key=' + getSessionApiKey(), {
                     method: 'POST',
                     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({ action: 'importT212Csv', csvData: parsedTransactions })

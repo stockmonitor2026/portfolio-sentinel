@@ -156,6 +156,21 @@ function IMPORTUJ_TRANSAKCJE_T212() {
 // ═══════════════════════════════════════════════════════════════
 
 /**
+ * Bezpiecznie parsuje liczbę (obsługuje przecinek i kropkę)
+ */
+function parseSafeFloat(value) {
+  if (value === null || value === undefined || value === '') return 0;
+  if (typeof value === 'number') return value;
+
+  const str = String(value).trim();
+  // Zamień przecinek na kropkę, usuń spacje
+  const cleanStr = str.replace(/,/g, '.').replace(/\s/g, '');
+  const num = parseFloat(cleanStr);
+
+  return isNaN(num) ? 0 : num;
+}
+
+/**
  * Agreguje transakcje buy/sell per ticker
  */
 function aggregateTransactions_(csvData) {
@@ -164,10 +179,10 @@ function aggregateTransactions_(csvData) {
   for (const row of csvData) {
     const action = String(row[CSV_CONFIG.T212_COLUMNS.ACTION]).toLowerCase();
     const ticker = String(row[CSV_CONFIG.T212_COLUMNS.TICKER]).trim();
-    const shares = parseFloat(row[CSV_CONFIG.T212_COLUMNS.SHARES]) || 0;
-    const price = parseFloat(row[CSV_CONFIG.T212_COLUMNS.PRICE]) || 0;
+    const shares = parseSafeFloat(row[CSV_CONFIG.T212_COLUMNS.SHARES]);
+    const price = parseSafeFloat(row[CSV_CONFIG.T212_COLUMNS.PRICE]);
     const currency = String(row[CSV_CONFIG.T212_COLUMNS.CURRENCY_PRICE]).trim() || 'USD';
-    const exchangeRate = parseFloat(row[CSV_CONFIG.T212_COLUMNS.EXCHANGE_RATE]) || 1;
+    const exchangeRate = parseSafeFloat(row[CSV_CONFIG.T212_COLUMNS.EXCHANGE_RATE]) || 1;
     
     // Skip empty rows or non-buy/sell
     if (!ticker || ticker === 'Ticker' || shares === 0) continue;

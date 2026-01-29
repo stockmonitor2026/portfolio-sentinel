@@ -61,6 +61,10 @@ function AKTUALIZUJ_CENY_PORTFELA() {
   const dataRange = sheet.getRange(2, CONFIG.COL.TICKER, lastRow - 1, 3);
   const data = dataRange.getValues();
   
+  // Pobierz aktualne ceny (Batch Read)
+  const pricesRange = sheet.getRange(2, CONFIG.COL.CENA_LIVE, lastRow - 1, 1);
+  const prices = pricesRange.getValues();
+
   let updated = 0;
   let errors = 0;
   let requestCount = 0;
@@ -89,9 +93,8 @@ function AKTUALIZUJ_CENY_PORTFELA() {
     requestCount++;
     
     if (result.price > 0) {
-      // Zapisz cenę do kolumny I (CENA_LIVE)
-      const row = 2 + i;
-      sheet.getRange(row, CONFIG.COL.CENA_LIVE).setValue(result.price);
+      // Aktualizuj cenę w tablicy
+      prices[i][0] = result.price;
       updated++;
       
       logSuccess(`${ticker}: ${result.price} USD`);
@@ -101,6 +104,12 @@ function AKTUALIZUJ_CENY_PORTFELA() {
     }
   }
   
+  // Zapisz wszystkie ceny naraz (Batch Write)
+  if (updated > 0) {
+    pricesRange.setValues(prices);
+    logSuccess(`💾 Zapisano ${updated} cen jednym zapytaniem.`);
+  }
+
   logInfo(`📊 Podsumowanie: ${updated} zaktualizowanych, ${errors} błędów`);
 }
 

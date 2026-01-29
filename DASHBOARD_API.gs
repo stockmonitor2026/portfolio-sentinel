@@ -20,8 +20,16 @@
 // ═══════════════════════════════════════════════════════════════
 
 const DASHBOARD_API_CONFIG = {
-  // Klucz API - zmień na własny losowy string!
-  API_KEY: 'SENTINEL_2026_d4m14n_SECURE_KEY',
+  // Klucz API - pobierany z Script Properties (bezpieczniej)
+  get API_KEY() {
+    const key = PropertiesService.getScriptProperties().getProperty('DASHBOARD_API_KEY');
+    if (!key) {
+      // Fallback only if strictly necessary for development, but for production security we should fail.
+      // throw new Error('DASHBOARD_API_KEY not set');
+      return ''; // Return empty string to ensure authentication fails (unless request key is also empty, which !key check covers)
+    }
+    return key;
+  },
   
   // Arkusze
   SHEET_PORTFEL: 'PORTFEL',
@@ -41,6 +49,17 @@ const DASHBOARD_API_CONFIG = {
  * Główny endpoint GET - zwraca dane portfela jako JSON
  */
 function doGet(e) {
+  // 🔒 SECURITY CHECK
+  if (!e.parameter.key || e.parameter.key !== DASHBOARD_API_CONFIG.API_KEY) {
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        error: true,
+        message: 'Unauthorized: Invalid API Key',
+        code: 403
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
   try {
     const data = getPortfolioData_();
     
@@ -64,6 +83,17 @@ function doGet(e) {
  * Body: { "question": "pytanie użytkownika" }
  */
 function doPost(e) {
+  // 🔒 SECURITY CHECK
+  if (!e.parameter.key || e.parameter.key !== DASHBOARD_API_CONFIG.API_KEY) {
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        error: true,
+        message: 'Unauthorized: Invalid API Key',
+        code: 403
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
   try {
     const body = JSON.parse(e.postData.contents);
     const question = body.question || '';
